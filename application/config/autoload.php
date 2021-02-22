@@ -170,4 +170,5 @@ $autoload['model'] = array(
 	'model_sub_clause',
 	'model_support_type',
 	'model_technical_advice',
-	'model_user');
+	'model_user',
+	'model_workplan');

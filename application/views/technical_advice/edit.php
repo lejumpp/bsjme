@@ -1,4 +1,3 @@
-
 <div class="content-wrapper">
 
 <section class="content-header">
@@ -25,6 +24,7 @@
 <section class="content">
   <ul class="nav nav-tabs">
     <li class="<?php echo (($active_tab === 'technical_advice') ? 'active' : '') ?>"><a data-toggle="tab" href="#technical_advice">Technical Advice</a></li>
+    <li class="<?php echo (($active_tab === 'needs_assessment') ? 'active' : '') ?>"><a data-toggle="tab" href="#needs_assessment">Needs Assessment</a></li>
     <li class="<?php echo (($active_tab === 'client_work_plan') ? 'active' : '') ?>"><a data-toggle="tab" href="#client_work_plan">Work Plan</a></li>		
     <li class="<?php echo (($active_tab === 'internal_cost_plan') ? 'active' : '') ?>"><a data-toggle="tab" href="#internal_cost_plan">Cost Plan</a></li>
   </ul>
@@ -291,6 +291,137 @@ $(document).ready(function() {
 });
 </script>
 
+<!----------------------------------------------------------------------------------------------------->
+<!--                                                                                                 -->
+<!--                                         Needs Assessment                                        -->
+<!--                                                                                                 -->
+<!----------------------------------------------------------------------------------------------------->
+
+<div id="needs_assessment" class="tab-pane fade <?php echo (($active_tab === 'needs_assessment') ? 'in active' : '') ?>">	
+    <div class="box">
+        <div class="box-body">
+          <embed width=100% height="1000px" src=<?php echo base_url()."assets/documentation/Needs_Assessment_Report_Template.pdf" ?> type="application/pdf"></embed>
+        </div>
+    </div>
+</div>
+
+
+<!----------------------------------------------------------------------------------------------------->
+<!--                                                                                                 -->
+<!--                                     Work Plan                                          -->
+<!--                                                                                                 -->
+<!----------------------------------------------------------------------------------------------------->
+
+<div id="client_work_plan" class="tab-pane fade <?php echo (($active_tab === 'client_work_plan') ? 'in active' : '') ?>">	
+    <div class="box">
+        <div class="box-body">
+            <div class="row">  <!-- /row divide by 2-->
+                 <div class="col-md-12 col-xs-12">
+
+                <?php if(in_array('createWorkPlan', $user_permission)): ?>
+                  <button class="btn btn-primary" data-toggle="modal" data-target="#createModalWorkPlan">
+                  Add Work Plan</button>
+                <?php endif; ?>
+                <?php if(in_array('viewWorkPlan', $user_permission)): ?>
+                  <!-- <?php echo '<a href="'.base_url('report_internal_cost_plan/report_internal_cost_plan/'.$technical_advice_data['id']).'" target="_blank" class="btn btn-success"><i class="fa fa-print"></i></a>'; ?> -->
+                <br /> <br />
+                <?php endif; ?>
+
+                <table id="manageTableWorkPlan" class="table table-bordered table-striped" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>1</th>
+                            <th>2</th>
+                            <th>3</th>								
+                            <th>4</th>
+                            <th>5</th>
+                            <th>6</th>
+                            <?php if(in_array('updateWorkPlan', $user_permission) || in_array('deleteWorkPlan', $user_permission)): ?>
+                            <th>Action</th>
+                            <?php endif; ?>
+                        </tr>
+                    </thead>
+                </table>
+                </div>
+             </div>
+        </div>
+    </div>
+</div>
+
+
+<!------------------------------------->
+<!-- Javascript part of Work Plan   --->
+<!------------------------------------->
+<script type="text/javascript">
+var manageTableWorkPlan;
+var base_url = "<?php echo base_url(); ?>";
+// initialize the datatable
+// manageTableWorkPlan = $('#manageTableWorkPlan').DataTable({
+// 		'ajax': base_url+'workplan/fetchWorkPlanData/'+<?php echo $technical_advice_data['id']; ?>,
+// 		'order': [[0, 'desc']]
+// 	});
+  /* Formatting function for row details - modify as you need */
+function format (d) 
+{
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d.email+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d.phone+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+
+$(document).ready(function() {
+    var manageTableWorkPlan = $('#manageTableWorkPlan').DataTable( {
+        'ajax': base_url+'workplan/fetchWorkPlanData/'+<?php echo $technical_advice_data['id']; ?>,
+        "columns": [
+            {
+                "className": 'details-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            },
+            { "data": "major_deliverable" },
+            { "data": "start_date" },
+            { "data": "end_date" },
+            { "data": "task" },
+            { "data": "entity" },
+            { "data": "res_off" },
+            { "data": "email" }
+        ],
+        "order": [[1, 'asc']]
+    } );
+     
+    // Add event listener for opening and closing details
+    $('#manageTableWorkPlan tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = manageTableWorkPlan.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
+} );
+
+
+</script>
 
 
 <!----------------------------------------------------------------------------------------------------->
