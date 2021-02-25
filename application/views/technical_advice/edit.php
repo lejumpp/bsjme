@@ -318,9 +318,8 @@ $(document).ready(function() {
             <div class="row">  <!-- /row divide by 2-->
                  <div class="col-md-12 col-xs-12">
 
-                <?php if(in_array('createWorkPlan', $user_permission)): ?>
-                  <button class="btn btn-primary" data-toggle="modal" data-target="#createModalWorkPlan">
-                  Add Work Plan</button>
+                 <?php if(in_array('createTechnicalAdvice', $user_permission)): ?>
+                  <a href="<?php echo base_url('workplan/create') ?>" class="btn btn-primary">Add Deliverable</a>
                 <?php endif; ?>
                 <?php if(in_array('viewWorkPlan', $user_permission)): ?>
                   <!-- <?php echo '<a href="'.base_url('report_internal_cost_plan/report_internal_cost_plan/'.$technical_advice_data['id']).'" target="_blank" class="btn btn-success"><i class="fa fa-print"></i></a>'; ?> -->
@@ -330,13 +329,9 @@ $(document).ready(function() {
                 <table id="manageTableWorkPlan" class="table table-bordered table-striped" style="width:100%">
                     <thead>
                         <tr>
-                            <th></th>
-                            <th>1</th>
-                            <th>2</th>
-                            <th>3</th>								
-                            <th>4</th>
-                            <th>5</th>
-                            <th>6</th>
+                            <th>Major Deliverable</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>				
                             <?php if(in_array('updateWorkPlan', $user_permission) || in_array('deleteWorkPlan', $user_permission)): ?>
                             <th>Action</th>
                             <?php endif; ?>
@@ -349,6 +344,36 @@ $(document).ready(function() {
     </div>
 </div>
 
+<!-----------------------------------------------------------  Delete Deliverable ------------------------------------------------------------------>
+
+<?php if(in_array('deleteClient', $user_permission)): ?>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="removeModal">
+<div class="modal-dialog" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title">Delete Deliverable</h4>
+    </div>
+
+    <form role="form" action="<?php echo base_url('workplan/remove') ?>" method="post" id="removeForm">
+      <div class="modal-body">
+        <p>All the information about the this deliverable included tasks and monitoring notes will be deleted.</p>
+        <p>Do you really want to delete?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal">No</button>
+        <button type="submit" class="btn btn-primary">Delete</button>
+      </div>
+    </form>
+
+
+  </div><!-- /.modal-content -->
+</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<?php endif; ?>
 
 <!------------------------------------->
 <!-- Javascript part of Work Plan   --->
@@ -357,68 +382,115 @@ $(document).ready(function() {
 var manageTableWorkPlan;
 var base_url = "<?php echo base_url(); ?>";
 // initialize the datatable
-// manageTableWorkPlan = $('#manageTableWorkPlan').DataTable({
-// 		'ajax': base_url+'workplan/fetchWorkPlanData/'+<?php echo $technical_advice_data['id']; ?>,
-// 		'order': [[0, 'desc']]
-// 	});
-  /* Formatting function for row details - modify as you need */
-function format (d) 
+manageTableWorkPlan = $('#manageTableWorkPlan').DataTable({
+		'ajax': base_url+'workplan/fetchWorkPlanData/'+<?php echo $technical_advice_data['id']; ?>,
+		'order': [[0, 'desc']]
+	});
+
+
+  function removeFunc(id)
 {
-    // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+d.email+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extension number:</td>'+
-            '<td>'+d.phone+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
+  if(id) {
+    $("#removeForm").on('submit', function() {
+
+      var form = $(this);
+
+      // remove the text-danger
+      $(".text-danger").remove();
+
+      $.ajax({
+        url: form.attr('action'),
+        type: form.attr('method'),
+        data: { client_id:id },
+        dataType: 'json',
+        success:function(response) {
+
+          manageTableWorkPlan.ajax.reload(null, false);
+
+          if(response.success === true) {
+            $("#messages").html('<div class="alert alert-success alert-dismissible" role="alert">'+
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+              '<strong> <span class="glyphicon glyphicon-ok-sign"></span> </strong>'+response.messages+
+            '</div>');
+
+            // hide the modal
+            $("#removeModal").modal('hide');
+
+          } else {
+
+            $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">'+
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>'+
+              '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>'+response.messages+
+            '</div>');
+          }
+        }
+      });
+
+      return false;
+    });
+  }
 }
 
-$(document).ready(function() {
-    var manageTableWorkPlan = $('#manageTableWorkPlan').DataTable( {
-        'ajax': base_url+'workplan/fetchWorkPlanData/'+<?php echo $technical_advice_data['id']; ?>,
-        "columns": [
-            {
-                "className": 'details-control',
-                "orderable": false,
-                "data": null,
-                "defaultContent": ''
-            },
-            { "data": "major_deliverable" },
-            { "data": "start_date" },
-            { "data": "end_date" },
-            { "data": "task" },
-            { "data": "entity" },
-            { "data": "res_off" },
-            { "data": "email" }
-        ],
-        "order": [[1, 'asc']]
-    } );
+  
+  /* Formatting function for row details - modify as you need */
+  // THis is to allow for the row expansion
+// function format (d) 
+// {
+//     // `d` is the original data object for the row
+//     return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+//         '<tr>'+
+//             '<td>Full name:</td>'+
+//             '<td>'+d.email+'</td>'+
+//         '</tr>'+
+//         '<tr>'+
+//             '<td>Extension number:</td>'+
+//             '<td>'+d.phone+'</td>'+
+//         '</tr>'+
+//         '<tr>'+
+//             '<td>Extra info:</td>'+
+//             '<td>And any further details here (images etc)...</td>'+
+//         '</tr>'+
+//     '</table>';
+// }
+
+// $(document).ready(function() {
+//     var manageTableWorkPlan = $('#manageTableWorkPlan').DataTable( {
+//         'ajax': base_url+'workplan/fetchWorkPlanData/'+<?php echo $technical_advice_data['id']; ?>,
+//         "columns": [
+//             {
+//                 "className": 'details-control',
+//                 "orderable": false,
+//                 "data": null,
+//                 "defaultContent": ''
+//             },
+//             { "data": "major_deliverable" },
+//             { "data": "start_date" },
+//             { "data": "end_date" },
+//             { "data": "task" },
+//             { "data": "entity" },
+//             { "data": "res_off" },
+//             { "data": "email" }
+//         ],
+//         "order": [[1, 'asc']]
+//     } );
      
-    // Add event listener for opening and closing details
-    $('#manageTableWorkPlan tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = manageTableWorkPlan.row( tr );
+//     // Add event listener for opening and closing details
+//     $('#manageTableWorkPlan tbody').on('click', 'td.details-control', function () {
+//         var tr = $(this).closest('tr');
+//         var row = manageTableWorkPlan.row( tr );
  
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
-        }
-    } );
-} );
+//         if ( row.child.isShown() ) {
+//             // This row is already open - close it
+//             row.child.hide();
+//             tr.removeClass('shown');
+//         }
+//         else {
+//             // Open this row
+//             row.child( format(row.data()) ).show();
+//             tr.addClass('shown');
+//         }
+//     } );
+// } );
 
 
 </script>
@@ -642,7 +714,7 @@ item.onchange=function(){
 };
 
 
-// $("#inquiryClientNav").addClass('active');
+
 
 // initialize the datatable
 manageTableInternalCostPlan = $('#manageTableInternalCostPlan').DataTable({

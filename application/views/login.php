@@ -74,9 +74,9 @@
         </div>
 
         <!-- Hyperlink to bring you to Registration Page -->
-        <div class="row" align="center">
+        <!-- <div class="row" align="center">
           <h4>Don't have an account <a href="<?php echo base_url('registration/register') ?>"><u>Click Here!</u></a></h4>
-        </div>
+        </div> -->
 
 
   </div>  <!-- /.login-box-body -->
