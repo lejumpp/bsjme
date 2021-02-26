@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Nov 06, 2020 at 03:22 PM
+-- Generation Time: Feb 26, 2021 at 09:30 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `billing_item` (
   `type` int(11) NOT NULL COMMENT 'type is either income or expense, income being 0 and expense being 1',
   `cost` double NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `billing_item`
@@ -219,7 +219,7 @@ CREATE TABLE IF NOT EXISTS `client` (
 
 INSERT INTO `client` (`id`, `trn`, `activity_id`, `city_id`, `county_id`, `parish_id`, `address`, `attempt`, `client_name`, `company_name`, `contact_name`, `director_name`, `directory`, `district`, `email`, `mobile`, `objective`, `phone`, `postal_box`, `postal_code`, `remark`, `target`, `website`, `updated_date`, `updated_by`) VALUES
 (24, 'TRN001', 1, 0, 1, 8, '650 Jean-D\'Estrees apt 807', 0, 'Carmen Gagnon', 'Voyagine Inc', 'Carmen', 'Carmen Gagnon', 'TRN001', '', 'voyagine@hotmail.com', '', '', '05149836594', 'H3C0G3', 'H3C0G3', '', '', '', '2020-02-27 00:57:20', 18),
-(25, 'TRN002', 2, 0, 1, 2, '11700 Racette', 0, 'M. Just', 'Hotel Association', 'Muriel', 'Muriel', 'TRN002', '', 'voyagine@hotmail.com', '', '', '5149836594', 'H1G 5J5', 'H1G 5J5', '', '', '', '2020-09-28 19:38:31', 23),
+(25, 'TRN002', 1, 0, 1, 2, '11700 Racette', 0, 'M. Just', 'Hotel Association', 'Muriel', 'Muriel', 'TRN002', '', 'voyagine@hotmail.com', '', '', '5149836594', 'H1G 5J5', 'H1G 5J5', '', '', '', '2021-02-09 21:13:38', 23),
 (26, 'TRN50', 1, 1, 1, 1, '67 Home Drive', 0, 'M. Untel', 'Jewel int.', '', '', 'TRN50', '', 'jewel@gmail.com', '4567899', '', '', '', '', 'dfdfsdfd', '', '', '2020-05-23 00:13:41', 28),
 (28, '123456789', 1, 0, 1, 1, 'dfdfd', 0, 'dfdfdf', 'fdfd', '', '', '123456789', '', 'nicholasjumpp1@gmail.com', '', '', '', '', '', '', '', '', '2020-11-03 19:06:44', 23);
 
@@ -289,7 +289,7 @@ CREATE TABLE IF NOT EXISTS `consultation` (
   `updated_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `consultation`
@@ -431,14 +431,15 @@ CREATE TABLE IF NOT EXISTS `inquiry` (
   `inquiry_date` date DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `client_id` (`client_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `inquiry`
 --
 
 INSERT INTO `inquiry` (`id`, `client_id`, `inquiry_type_id`, `support_type_id`, `request`, `feedback`, `answered_by`, `inquiry_date`) VALUES
-(1, 25, 2, 1, 'Could you please clarify the needs analysis', 'Sure no proble. fix so and so ', '', '2020-07-29');
+(1, 25, 2, 1, 'Could you please clarify the needs analysis', 'Sure no proble. fix so and so ', '', '2020-07-29'),
+(2, 28, 2, 1, 'asasafff', 'asasaaa', 'asas', '2021-02-26');
 
 -- --------------------------------------------------------
 
@@ -474,7 +475,6 @@ CREATE TABLE IF NOT EXISTS `internal_cost_plan` (
   `ta_id` int(11) NOT NULL,
   `client_id` int(11) NOT NULL,
   `billing_item_id` int(11) NOT NULL,
-  `p_amount` double DEFAULT NULL,
   `a_amount` double DEFAULT NULL,
   `date_updated` date NOT NULL,
   `updated_by` int(11) NOT NULL,
@@ -483,17 +483,17 @@ CREATE TABLE IF NOT EXISTS `internal_cost_plan` (
   KEY `client_id` (`client_id`),
   KEY `ta_id` (`ta_id`),
   KEY `updated_by` (`updated_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `internal_cost_plan`
 --
 
-INSERT INTO `internal_cost_plan` (`id`, `ta_id`, `client_id`, `billing_item_id`, `p_amount`, `a_amount`, `date_updated`, `updated_by`) VALUES
-(6, 8, 24, 3, 12000, 11501, '2020-10-08', 23),
-(8, 8, 24, 2, 50123, 30426, '2020-11-06', 23),
-(9, 8, 24, 4, 6000, 5000, '2020-10-20', 23),
-(10, 8, 24, 3, 50, 50, '2020-10-20', 23);
+INSERT INTO `internal_cost_plan` (`id`, `ta_id`, `client_id`, `billing_item_id`, `a_amount`, `date_updated`, `updated_by`) VALUES
+(6, 8, 24, 3, 11501, '2020-10-08', 23),
+(10, 8, 24, 3, 50, '2020-10-20', 23),
+(11, 8, 24, 2, 99000, '2021-02-11', 23),
+(12, 9, 25, 2, 93000, '2021-02-11', 23);
 
 -- --------------------------------------------------------
 
@@ -515,7 +515,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `remark` text,
   `attributes` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=159 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=160 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `log`
@@ -618,6 +618,8 @@ INSERT INTO `log` (`id`, `user_id`, `timestamp`, `module`, `action`, `subject_id
 (156, 23, '2020-11-05 18:53:11', 'Consultation', 'Update', 32, 25, 32, NULL, 'Update Consultation CON02 and Move from phase Phase 1 to phase Phase 2', 'a:2:{s:3:\"old\";a:39:{s:2:\"id\";s:2:\"32\";s:15:\"consultation_no\";s:5:\"CON02\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:8:\"phase_id\";s:1:\"1\";s:10:\"program_id\";s:2:\"14\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"31\";s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:13:\"date_creation\";s:10:\"2020-02-27\";s:8:\"date_end\";s:10:\"0000-00-00\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:7:\"product\";s:0:\"\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-04 16:27:07\";s:10:\"updated_by\";s:5:\"admin\";s:7:\"address\";s:13:\"11700 Racette\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:13:\"director_name\";s:6:\"Muriel\";s:3:\"trn\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:7:\"website\";s:0:\"\";s:9:\"directory\";s:6:\"TRN002\";s:11:\"parish_name\";s:9:\"Clarendon\";s:10:\"phase_name\";s:7:\"Phase 1\";s:11:\"county_name\";s:8:\"Cornwall\";s:12:\"program_name\";s:12:\"spa standard\";}s:3:\"new\";a:21:{s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:15:\"consultation_no\";s:5:\"CON02\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:8:\"date_end\";s:0:\"\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:8:\"phase_id\";s:1:\"2\";s:7:\"product\";s:0:\"\";s:10:\"program_id\";s:2:\"14\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:12:\"updated_date\";s:19:\"2020-11-05 18:53:11\";s:10:\"updated_by\";s:2:\"23\";}}'),
 (157, 23, '2020-11-06 14:08:29', 'Consultation', 'Update', 32, 25, 32, NULL, 'Update Consultation CON02 and Move from phase Phase 2 to phase Phase 1', 'a:2:{s:3:\"old\";a:39:{s:2:\"id\";s:2:\"32\";s:15:\"consultation_no\";s:5:\"CON02\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:8:\"phase_id\";s:1:\"2\";s:10:\"program_id\";s:2:\"14\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:13:\"date_creation\";s:10:\"2020-02-27\";s:8:\"date_end\";s:10:\"0000-00-00\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:7:\"product\";s:0:\"\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-05 18:53:11\";s:10:\"updated_by\";s:5:\"admin\";s:7:\"address\";s:13:\"11700 Racette\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:13:\"director_name\";s:6:\"Muriel\";s:3:\"trn\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:7:\"website\";s:0:\"\";s:9:\"directory\";s:6:\"TRN002\";s:11:\"parish_name\";s:9:\"Clarendon\";s:10:\"phase_name\";s:7:\"Phase 2\";s:11:\"county_name\";s:8:\"Cornwall\";s:12:\"program_name\";s:12:\"spa standard\";}s:3:\"new\";a:21:{s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:15:\"consultation_no\";s:5:\"CON02\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:8:\"date_end\";s:0:\"\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:8:\"phase_id\";s:1:\"1\";s:7:\"product\";s:0:\"\";s:10:\"program_id\";s:2:\"14\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"11\";s:12:\"updated_date\";s:19:\"2020-11-06 14:08:29\";s:10:\"updated_by\";s:2:\"23\";}}'),
 (158, 23, '2020-11-06 14:28:28', 'Consultation', 'Update', 32, 25, 32, NULL, 'Update Consultation CON02 and Move from phase Phase 1 to phase Phase 2', 'a:2:{s:3:\"old\";a:39:{s:2:\"id\";s:2:\"32\";s:15:\"consultation_no\";s:5:\"CON02\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:8:\"phase_id\";s:1:\"1\";s:10:\"program_id\";s:2:\"14\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"11\";s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:13:\"date_creation\";s:10:\"2020-02-27\";s:8:\"date_end\";s:10:\"0000-00-00\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:7:\"product\";s:0:\"\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-06 14:08:29\";s:10:\"updated_by\";s:5:\"admin\";s:7:\"address\";s:13:\"11700 Racette\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:13:\"director_name\";s:6:\"Muriel\";s:3:\"trn\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:7:\"website\";s:0:\"\";s:9:\"directory\";s:6:\"TRN002\";s:11:\"parish_name\";s:9:\"Clarendon\";s:10:\"phase_name\";s:7:\"Phase 1\";s:11:\"county_name\";s:8:\"Cornwall\";s:12:\"program_name\";s:12:\"spa standard\";}s:3:\"new\";a:21:{s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:15:\"consultation_no\";s:5:\"CON02\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:8:\"date_end\";s:0:\"\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:8:\"phase_id\";s:1:\"2\";s:7:\"product\";s:0:\"\";s:10:\"program_id\";s:2:\"14\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:12:\"updated_date\";s:19:\"2020-11-06 14:28:28\";s:10:\"updated_by\";s:2:\"23\";}}');
+INSERT INTO `log` (`id`, `user_id`, `timestamp`, `module`, `action`, `subject_id`, `client_id`, `consultation_id`, `ta_id`, `remark`, `attributes`) VALUES
+(159, 23, '2021-02-09 16:13:38', 'Client', 'Update', 25, 25, NULL, NULL, 'Update Client TRN002', 'a:2:{s:3:\"old\";a:4:{i:0;a:25:{s:2:\"id\";s:2:\"28\";s:3:\"trn\";s:9:\"123456789\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:5:\"dfdfd\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:6:\"dfdfdf\";s:12:\"company_name\";s:4:\"fdfd\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:9:\"123456789\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:24:\"nicholasjumpp1@gmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-03 14:06:44\";s:10:\"updated_by\";s:2:\"23\";}i:1;a:25:{s:2:\"id\";s:2:\"25\";s:3:\"trn\";s:6:\"TRN002\";s:11:\"activity_id\";s:1:\"2\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"2\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:12:\"contact_name\";s:6:\"Muriel\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-09-28 14:38:31\";s:10:\"updated_by\";s:2:\"23\";}i:2;a:25:{s:2:\"id\";s:2:\"26\";s:3:\"trn\";s:5:\"TRN50\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"1\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:13:\"67 Home Drive\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:8:\"M. Untel\";s:12:\"company_name\";s:10:\"Jewel int.\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:5:\"TRN50\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:15:\"jewel@gmail.com\";s:6:\"mobile\";s:7:\"4567899\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:8:\"dfdfsdfd\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-05-22 19:13:41\";s:10:\"updated_by\";s:2:\"28\";}i:3;a:25:{s:2:\"id\";s:2:\"24\";s:3:\"trn\";s:6:\"TRN001\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"8\";s:7:\"address\";s:26:\"650 Jean-D\'Estrees apt 807\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:13:\"Carmen Gagnon\";s:12:\"company_name\";s:12:\"Voyagine Inc\";s:12:\"contact_name\";s:6:\"Carmen\";s:13:\"director_name\";s:13:\"Carmen Gagnon\";s:9:\"directory\";s:6:\"TRN001\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:11:\"05149836594\";s:10:\"postal_box\";s:6:\"H3C0G3\";s:11:\"postal_code\";s:6:\"H3C0G3\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-02-26 19:57:20\";s:10:\"updated_by\";s:2:\"18\";}}s:3:\"new\";a:23:{s:11:\"activity_id\";s:1:\"1\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"city_id\";s:0:\"\";s:12:\"company_name\";s:17:\"Hotel Association\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"contact_name\";s:6:\"Muriel\";s:9:\"county_id\";s:1:\"1\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:9:\"parish_id\";s:1:\"2\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:3:\"trn\";s:6:\"TRN002\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2021-02-09 16:13:38\";s:10:\"updated_by\";s:2:\"23\";}}');
 
 -- --------------------------------------------------------
 
@@ -1085,7 +1087,7 @@ CREATE TABLE IF NOT EXISTS `status` (
   `name` varchar(100) NOT NULL,
   `active` tinyint(1) NOT NULL COMMENT '1=active  2=inactive',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=52 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `status`
@@ -1307,6 +1309,77 @@ INSERT INTO `user` (`id`, `profile_id`, `username`, `password`, `email`, `name`,
 (38, 4, 'TRN003', '$2y$10$FnwBu5YX5GSpu5T0sXcNvulVbC7tBBglrCPteknl..B6eODAxoBIi', 'voyagine@hotmail.com', 'Client No 3', '05149836594', NULL, 1, 18, '2019-12-23 17:59:28'),
 (41, 6, 'reader', '$2y$10$CWCkyvlwQNZqYhX/yzLsouJGPeM7GqWJy/4J5T.PYQlWGUr5Dqpy.', 'reader@hotmail.com', 'M. Reader', '5149836594', NULL, 1, 18, '2020-02-25 15:13:49');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workplan`
+--
+
+DROP TABLE IF EXISTS `workplan`;
+CREATE TABLE IF NOT EXISTS `workplan` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `client_id` int(11) NOT NULL,
+  `ta_id` int(11) NOT NULL,
+  `major_deliverable` text NOT NULL,
+  `start_date` date DEFAULT NULL,
+  `end_date` date DEFAULT NULL,
+  `updated_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `workplan`
+--
+
+INSERT INTO `workplan` (`id`, `client_id`, `ta_id`, `major_deliverable`, `start_date`, `end_date`, `updated_by`) VALUES
+(3, 24, 8, 'Buy A Car 123456', '2021-02-27', '2021-03-12', 23);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workplan_monitoring`
+--
+
+DROP TABLE IF EXISTS `workplan_monitoring`;
+CREATE TABLE IF NOT EXISTS `workplan_monitoring` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wid` int(11) NOT NULL,
+  `notes` text NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_by` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `wid` (`wid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `workplan_monitoring`
+--
+
+INSERT INTO `workplan_monitoring` (`id`, `wid`, `notes`, `date`, `created_by`) VALUES
+(1, 3, 'Test no 3', '2021-02-26 17:30:28', 23);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `workplan_task`
+--
+
+DROP TABLE IF EXISTS `workplan_task`;
+CREATE TABLE IF NOT EXISTS `workplan_task` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wid` int(11) NOT NULL,
+  `task` text NOT NULL,
+  `entity` text,
+  `responsible_officer` text,
+  `email` varchar(255) DEFAULT NULL,
+  `phone` varchar(255) DEFAULT NULL,
+  `s_date` date DEFAULT NULL,
+  `e_date` date DEFAULT NULL,
+  `status_id` text,
+  PRIMARY KEY (`id`),
+  KEY `wid` (`wid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
 --
 -- Constraints for dumped tables
 --
@@ -1339,6 +1412,18 @@ ALTER TABLE `question_option`
 ALTER TABLE `technical_advice`
   ADD CONSTRAINT `technical_advice_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`),
   ADD CONSTRAINT `technical_advice_ibfk_2` FOREIGN KEY (`activity`) REFERENCES `activity` (`id`);
+
+--
+-- Constraints for table `workplan_monitoring`
+--
+ALTER TABLE `workplan_monitoring`
+  ADD CONSTRAINT `workplan_monitoring_ibfk_1` FOREIGN KEY (`wid`) REFERENCES `workplan` (`id`);
+
+--
+-- Constraints for table `workplan_task`
+--
+ALTER TABLE `workplan_task`
+  ADD CONSTRAINT `workplan_task_ibfk_1` FOREIGN KEY (`wid`) REFERENCES `workplan` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

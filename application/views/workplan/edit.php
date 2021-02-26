@@ -31,6 +31,8 @@
         $this->session->set_userdata($workplan_id);
       } ?>
 
+      <!-- <?php var_dump($this->session); ?> -->
+
 
       <!----------------------------------------------------------------------------------------------------->
       <!--                                                                                                 -->
@@ -101,7 +103,7 @@
                     </div>
                     <div class="form-group">
                       <button type="submit" class="btn btn-primary">Save Changes</button>
-                      <a href="<?php echo base_url('workplan/') ?>" class="btn btn-warning">Close</a>
+                      <a href="<?php echo base_url('technical_advice/update/' . $this->session->technical_advice_id) ?>" class="btn btn-warning">Close</a>
                     </div>
                   </form>
 

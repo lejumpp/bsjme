@@ -146,8 +146,6 @@ class Workplan extends Admin_Controller
         }
     }
 
-
-
     public function update($id)
     {
         if (!in_array('updateWorkPlan', $this->permission) and !in_array('viewWorkPlan', $this->permission)) {
@@ -173,10 +171,10 @@ class Workplan extends Admin_Controller
 
             if ($update == true) {
                 $this->session->set_flashdata('success', 'Successfully updated');
-                redirect('workplan/', 'refresh');
+                redirect('workplan/update/' . $this->session->workplan_id, 'refresh');
             } else {
                 $this->session->set_flashdata('errors', 'Error occurred!!');
-                redirect('workplan/', 'refresh');
+                redirect('workplan/update/' . $this->session->workplan_id, 'refresh');
             }
         } else {
             $result = array();

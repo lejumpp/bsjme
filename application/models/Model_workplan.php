@@ -107,7 +107,7 @@ class Model_workplan extends CI_Model
 	public function getMonitoringNotes($id)
 	{
 		if ($id) {
-			$sql = "SELECT `notes`,`date`, (SELECT name FROM user WHERE workplan_monitoring.created_by=user.id) as 'updated_by' FROM workplan_monitoring WHERE wid=?";
+			$sql = "SELECT `notes`,`date`, (SELECT name FROM user WHERE workplan_monitoring.created_by=user.id) as 'created_by' FROM workplan_monitoring WHERE wid=?";
 			$query = $this->db->query($sql, array($id));
 			return $query->result_array();
 		}
