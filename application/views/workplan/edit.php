@@ -109,7 +109,6 @@
                     <div class="col-md-12 col-xs-12">
                       <?php if (in_array('createWorkPlan', $user_permission)) : ?>
                         <button id="addTaskButton" class="btn btn-primary" data-toggle="modal" data-target="#createModalTask">Add Task</button>
-                        <br /> <br />
                       <?php endif; ?>
                       <table id="manageTableTask" class="table table-bordered table-striped" style="width:100%">
                         <thead>
@@ -307,6 +306,55 @@
                     </div><!-- /.modal -->
                   <?php endif; ?>
 
+                  <div class="box-footer">
+                    <div class="col-md-12 col-xs-12">
+                      <?php if (in_array('createWorkPlan', $user_permission)) : ?>
+                        <button id="addNoteButton" class="btn btn-primary" data-toggle="modal" data-target="#editModalNote">Add Note</button>
+                        <br /> <br />
+                      <?php endif; ?>
+                      <table style="width:100%" id="manageTableNotes" class="table table-bordered table-striped" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th style="width:60%">Notes</th>
+                            <th style="width:20%">Date Updated</th>
+                            <th style="width:20%">Updated By</th>
+                            <!-- <?php if (in_array('updateWorkPlan', $user_permission) || in_array('deleteWorkPlan', $user_permission)) : ?>
+                              <th>Action</th>
+                            <?php endif; ?> -->
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+                  </div>
+
+                  <!-- Monitoring Notes for the Work Plan  -->
+                  <?php if (in_array('createWorkPlan', $user_permission)) : ?>
+                    <div class="modal fade" tabindex="-1" role="dialog" id="editModalNote">
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Monitoring Note</h4>
+                          </div>
+
+                          <form role="form" action="<?php echo base_url('workplan/createMonitoringNote') ?>" method="post" id="editFormMonitoring">
+                            <div class="modal-body">
+
+                              <div class="form-group">
+                                <label for="monitoring_note">Monitoring Note<font color="red"> *</font></label>
+                                <textarea class="form-control" id="monitoring_note" name="monitoring_note" rows="3" autocomplete="off"></textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                              <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                          </form>
+                        </div><!-- /.modal-content -->
+                      </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+                  <?php endif; ?>
+
                 </div>
               </div>
             </div>
@@ -320,17 +368,33 @@
 <!-----------------------------------------   Javascript  --------------------------------------->
 <script type="text/javascript">
   var manageTableTask;
+  var manageTableNotes;
+  var monitoring_note = document.getElementById("monitoring_note");
   var base_url = "<?php echo base_url(); ?>";
+
+
 
   $(document).ready(function() {
 
-    // initialize the datatable
+    // initialize the datatable for Tasks
     manageTableTask = $('#manageTableTask').DataTable({
       'ajax': base_url + 'workplan/fetchWorkPlanTaskData/' + <?php echo $wkplan_data['workplan']['id']; ?>,
       'order': [
         [0, 'desc']
+      ],
+      "scroolY": "200px",
+      "scrollCollaps": true,
+      "paging": false
+    });
+
+    // initialize the datatable for Tasks
+    manageTableNotes = $('#manageTableNotes').DataTable({
+      'ajax': base_url + 'workplan/fetchMonitoringNotes/' + <?php echo $wkplan_data['workplan']['id']; ?>,
+      'order': [
+        [0, 'desc']
       ]
     });
+
 
     //--> Submit Create Form
     $("#createFormTask").unbind('submit').on('submit', function() {
@@ -384,6 +448,58 @@
       return false;
     });
 
+  });
+
+  //--> Submit Create Form for Notes
+  $("#editFormMonitoring").unbind('submit').on('submit', function() {
+    var form = $(this);
+
+    // remove the text-danger
+    $(".text-danger").remove();
+
+    $.ajax({
+      url: form.attr('action'),
+      type: form.attr('method'),
+      data: form.serialize(), // /converting the form data into array and sending it to server
+      dataType: 'json',
+      success: function(response) {
+
+        manageTableNotes.ajax.reload(null, false);
+
+        if (response.success === true) {
+
+          // hide the modal
+          $("#editModalNote").modal('hide');
+
+          // reset the form
+          $("#editFormMonitoring")[0].reset();
+          $("#editFormMonitoring .form-group").removeClass('has-error').removeClass('has-success');
+
+        } else {
+
+          if (response.messages instanceof Object) {
+            $.each(response.messages, function(index, value) {
+              var id = $("#" + index);
+
+              id.closest('.form-group')
+                .removeClass('has-error')
+                .removeClass('has-success')
+                .addClass(value.length > 0 ? 'has-error' : 'has-success');
+
+              id.after(value);
+
+            });
+          } else {
+            $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+              '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+              '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+              '</div>');
+          }
+        }
+      }
+    });
+
+    return false;
   });
 
 
@@ -496,5 +612,9 @@
         return false;
       });
     }
+  }
+
+  function createNote(id) {
+
   }
 </script>

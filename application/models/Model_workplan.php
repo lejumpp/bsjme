@@ -103,4 +103,24 @@ class Model_workplan extends CI_Model
 			return ($delete == true) ? true : false;
 		}
 	}
+
+	public function getMonitoringNotes($id)
+	{
+		if ($id) {
+			$sql = "SELECT `notes`,`date`, (SELECT name FROM user WHERE workplan_monitoring.created_by=user.id) as 'updated_by' FROM workplan_monitoring WHERE wid=?";
+			$query = $this->db->query($sql, array($id));
+			return $query->result_array();
+		}
+	}
+
+	public function createMonitoringNote($data)
+	{
+		$insert = $this->db->insert('workplan_monitoring', $data);
+		if ($insert == false) {
+			return false;
+		} else {
+			$insert_id = $this->db->insert_id();
+			return  $insert_id;
+		}
+	}
 }

@@ -214,6 +214,7 @@ class Workplan extends Admin_Controller
         echo json_encode($response);
     }
 
+    //--> Functions related to the workplan task
     public function fetchWorkPlanTaskData($id)
     {
         $result = array('data' => array());
@@ -363,6 +364,61 @@ class Workplan extends Admin_Controller
         } else {
             $response['success'] = false;
             $response['messages'] = 'Refresh the page again';
+        }
+
+        echo json_encode($response);
+    }
+
+    //--> Functions related to the workplan monitoring notes
+    public function fetchMonitoringNotes($id)
+    {
+        $result = array('data' => array());
+        $data = $this->model_workplan->getMonitoringNotes($id);
+        foreach ($data as $key => $value) {
+            $buttons = '';
+
+            // if (in_array('updateWorkPlan', $this->permission)) {
+            //     $buttons .= '<button type="button" class="btn btn-default" onclick="editTask(' . $value['id'] . ')" data-toggle="modal" data-target="#editModalTask"><i class="fa fa-pencil"></i></button>';
+            // }
+            $result['data'][$key] = array(
+                $value['notes'],
+                $value['date'],
+                $value['created_by']
+            );
+        } // /foreach
+        echo json_encode($result);
+    }
+
+    public function createMonitoringNote()
+    {
+        if (!in_array('createWorkPlan', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+        $this->form_validation->set_rules('monitoring_note', 'Nonitoring Note', 'trim|required');
+        $this->form_validation->set_error_delimiters('<p class="alert alert-warning">', '</p>');
+        $response = array();
+
+        if ($this->form_validation->run() == TRUE) {
+            $data = array(
+                'wid' => $this->session->workplan_id,
+                'notes' => $this->input->post('monitoring_note'),
+                'created_by' => $this->session->user_id
+            );
+
+            $create = $this->model_workplan->createMonitoringNote($data);
+
+            if ($create == true) {
+                $response['success'] = true;
+                $response['messages'] = 'Successfully created';
+            } else {
+                $response['success'] = false;
+                $response['messages'] = 'Error in the database while creating the information';
+            }
+        } else {
+            $response['success'] = false;
+            foreach ($_POST as $key => $value) {
+                $response['messages'][$key] = form_error($key);
+            }
         }
 
         echo json_encode($response);
