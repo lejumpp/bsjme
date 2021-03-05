@@ -46,7 +46,7 @@ class Report_consultation extends Admin_Controller
               'heading_cell_end'    => '',
               'row_start'           => '<tr>',
               'row_end'             => '</tr>',
-              'cell_start'          => '<td>',
+              'cell_start'          => '<td style="text-align:right">',
               'cell_end'            => '</td>',
               'row_alt_start'       => '<tr>',
               'row_alt_end'         => '</tr>',

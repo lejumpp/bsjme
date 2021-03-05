@@ -5,6 +5,17 @@
 	display:block;
 }
 
+.modal-body{
+	word-break: break-all;
+  }
+
+
+  .td {
+	word-break: break-all;
+	text-align: justify;
+  }
+
+  
 .post-thumb{
 	width:100%;
 	height:100%;
