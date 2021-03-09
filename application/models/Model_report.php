@@ -122,12 +122,67 @@ class Model_report extends CI_Model
 		ORDER BY document_type.name";
 		$query = $this->db->query($sql, array($client_id));
 		return $query->result();
+	}
+	
 
+// Generates the company name
+public function getReportWorkPlanCompany($id)
+{
+	$sql = "SELECT workplan.client_id,client.company_name AS 'company_name' 
+	FROM workplan
+	JOIN client ON workplan.client_id = client.id
+	WHERE workplan.id=?";
+	$query = $this->db->query($sql, array($id));
+	return $query->result();	
+}
+
+
+// Generates the major deliverables for the workplan
+	public function getReportWorkPland($id)
+	{
+
+
+		$sql = "SELECT workplan.*
+  		FROM workplan 
+		WHERE workplan.id = ?";
+		$query = $this->db->query($sql, array($id));
+		return $query->result();
+
+		
 	}
 
+// Generates the tasks for the workplan
+	public function getReportWorkPlant($id)
+	{
+		$sql = "SELECT workplan_task.task AS 'task', workplan_task.entity AS 'entity' ,
+ 		workplan_task.responsible_officer AS 'responsible_officer', workplan_task.email AS 'email', 
+ 		workplan_task.phone AS 'phone', workplan_task.s_date AS 's_date',
+		workplan_task.e_date AS 'e_date'
+  		FROM workplan_task
+		WHERE workplan_task.wid = ?";
+		$query = $this->db->query($sql, array($id));
+		return $query->result();
+
+		
+	}
+
+	// Generates the tasks for the workplan
+	public function getReportWorkPlann($id)
+	{
 
 
+		$sql = "SELECT workplan_monitoring.notes AS 'notes', workplan_monitoring.date AS 'date', 
+		workplan_monitoring.created_by AS 'created_by'
+  		FROM workplan_monitoring
+		WHERE workplan_monitoring.wid = ?";
+		
+		$query = $this->db->query($sql, array($id));
+		return $query->result();
 
+		
+	}
+
+	
 	public function get_REP01()
 	{
 		//--> Criteria County

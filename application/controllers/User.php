@@ -99,12 +99,12 @@ class User extends Admin_Controller
 		}
 
 		$response = array();
-
 		$this->form_validation->set_rules('username', 'Username', 'trim|required|min_length[5]|max_length[12]|is_unique[user.username]');
-		$this->form_validation->set_rules('email', 'Email', 'trim|required');
-		$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[5]');
+		$this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
+		$this->form_validation->set_rules('password', 'Password', 'trim|required|callback_password_strength');
 		$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required|matches[password]');
 		$this->form_validation->set_rules('name', 'Name', 'trim|required');
+		$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 
 		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
@@ -142,6 +142,87 @@ class User extends Admin_Controller
 	}
 
 
+	// The password_strength funciton checks to see if the users' password:
+	// Has at least one Lowercase letter
+	// Has at least one Uppercase letter
+	// Has at least 8 characters
+	// Has at least one special character 
+	// Is at least 8 characters in length
+	// Does not exceed 32 characters in length
+	// The functon is then called back in the form_validation
+	// section for password $this->form_validation->set_rules('password', 'Password', 'callback_password_strength');
+	public function password_strength($password='')
+	{
+		$regex_lowercase = '/[a-z]/';
+		$regex_uppercase = '/[A-Z]/';
+		$regex_number = '/[0-9]/';
+		$regex_special = '/[!@#$%^&*()\-_=+{};:,<.>~]/';
+
+		if (preg_match_all($regex_lowercase, $password) < 1)
+		{
+			$this->form_validation->set_message('password_strength', 'The {field} field must be at least one lowercase letter.');
+
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_uppercase, $password) < 1)
+		{
+			$this->form_validation->set_message('password_strength', 'The {field} field must be at least one uppercase letter.');
+
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_number, $password) < 1)
+		{
+			$this->form_validation->set_message('password_strength', 'The {field} field must have at least one number.');
+
+			return FALSE;
+		}
+
+		if (preg_match_all($regex_special, $password) < 1)
+		{
+			$this->form_validation->set_message('password_strength', 'The {field} field must have at least one special character.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>~'));
+
+			return FALSE;
+		}
+
+		if (strlen($password) < 8)
+		{
+			$this->form_validation->set_message('password_strength', 'The {field} field must be at least 8 characters in length.');
+
+			return FALSE;
+		}
+
+		if (strlen($password) > 32)
+		{
+			$this->form_validation->set_message('password_strength', 'The {field} field cannot exceed 32 characters in length.');
+
+			return FALSE;
+		}
+
+		return TRUE;
+	}
+	
+	function phone_number_check($phone)
+	{
+		$phone = trim($phone);
+		if ($phone == '') {
+			return TRUE;
+		}
+		else
+		{
+			if (preg_match('/^\(?([0-9]{1})[-.]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/', $phone))
+			{
+				return preg_replace('/^\(?([0-9]{1})[-.]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/', '($1) $2-$3', $phone);
+			}
+			else
+			{
+				$this->form_validation->set_message('phone_number_check', 'Enter phone number , eg 1-876-111-1111.');
+				return FALSE;
+			}
+		}
+	}
+	
 	public function createUserClient($client_id)
 	{
 		if(!in_array('createUser', $this->permission)) {redirect('dashboard', 'refresh');}
@@ -222,10 +303,10 @@ class User extends Admin_Controller
 			// We have an update without changing the password
 	        if(empty($this->input->post('edit_password')))
         		{
-        		$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
-				$this->form_validation->set_rules('edit_email', 'Email', 'trim|required');
-				$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
-				$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+					$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
+					$this->form_validation->set_rules('edit_email', 'Email', 'valid_email|trim|required');
+					$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
+					$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 
         		if ($this->form_validation->run() == TRUE) {
 		        	$data = array(
@@ -260,10 +341,11 @@ class User extends Admin_Controller
             else  //we have an update with the password included
             	{
 		        	$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
-					$this->form_validation->set_rules('edit_email', 'Email', 'trim|required');
+					$this->form_validation->set_rules('edit_email', 'Email', 'valid_email|trim|required');
 					$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
-		        	$this->form_validation->set_rules('edit_password', 'Password', 'trim|required|min_length[6]');
+		        	$this->form_validation->set_rules('edit_password', 'Password', 'trim|required|callback_password_strength');
 					$this->form_validation->set_rules('edit_cpassword', 'Confirm Password', 'trim|required|matches[edit_password]');
+					$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 					$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
 
 					if($this->form_validation->run() == TRUE) {
@@ -346,8 +428,8 @@ class User extends Admin_Controller
         $id = $this->session->userdata('user_id');
 
         if($id) {
-            $this->form_validation->set_rules('email', 'Email', 'trim|required');
-            $this->form_validation->set_rules('name', 'Name', 'trim|required');
+			$this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
+            $this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 
 
             if ($this->form_validation->run() == TRUE) {
