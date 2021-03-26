@@ -92,12 +92,6 @@
           } ?>
 
 
-
-
-
-
-
-
           <!----------------------------------------------------------------------------------------------------->
           <!--                                                                                                 -->
           <!--                                        TECHNICAL ADVICE                                         -->
@@ -330,11 +324,11 @@
                   <!-- /row divide by 2-->
                   <div class="col-md-12 col-xs-12">
 
-                    <?php if (in_array('createTechnicalAdvice', $user_permission)) : ?>
+                    <?php if (in_array('createWorkPlan', $user_permission)) : ?>
                       <a href="<?php echo base_url('workplan/create') ?>" class="btn btn-primary">Add Deliverable</a>
                     <?php endif; ?>
                     <?php if (in_array('viewWorkPlan', $user_permission)) : ?>
-                      <!-- <?php echo '<a href="' . base_url('report_internal_cost_plan/report_internal_cost_plan/' . $technical_advice_data['id']) . '" target="_blank" class="btn btn-success"><i class="fa fa-print"></i></a>'; ?> -->
+                      <?php echo '<a href="' . base_url('report_workplan/report_workplan/' . $technical_advice_data['id']) . '" target="_blank" class="btn btn-success"><i class="fa fa-print"></i></a>'; ?>
                       <br /> <br />
                     <?php endif; ?>
 
