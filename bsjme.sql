@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Feb 26, 2021 at 09:30 PM
+-- Generation Time: Mar 26, 2021 at 03:19 PM
 -- Server version: 5.7.26
 -- PHP Version: 7.2.18
 
@@ -63,16 +63,6 @@ CREATE TABLE IF NOT EXISTS `answer` (
   KEY `consultation_id` (`consultation_id`),
   KEY `question_id` (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `answer`
---
-
-INSERT INTO `answer` (`id`, `consultation_id`, `question_id`, `answer`, `updated_date`, `updated_by`) VALUES
-(1, 32, 14, '[\"hello darkness my old friend\"]', '2020-11-06 14:20:58', 23),
-(2, 32, 23, '[\"26\"]', '2020-11-06 14:26:24', 23),
-(3, 32, 30, '[\"31\"]', '2020-11-06 14:28:36', 23),
-(4, 32, 28, '[\"we trying our best\"]', '2020-11-06 14:59:37', 23);
 
 -- --------------------------------------------------------
 
@@ -218,7 +208,7 @@ CREATE TABLE IF NOT EXISTS `client` (
 --
 
 INSERT INTO `client` (`id`, `trn`, `activity_id`, `city_id`, `county_id`, `parish_id`, `address`, `attempt`, `client_name`, `company_name`, `contact_name`, `director_name`, `directory`, `district`, `email`, `mobile`, `objective`, `phone`, `postal_box`, `postal_code`, `remark`, `target`, `website`, `updated_date`, `updated_by`) VALUES
-(24, 'TRN001', 1, 0, 1, 8, '650 Jean-D\'Estrees apt 807', 0, 'Carmen Gagnon', 'Voyagine Inc', 'Carmen', 'Carmen Gagnon', 'TRN001', '', 'voyagine@hotmail.com', '', '', '05149836594', 'H3C0G3', 'H3C0G3', '', '', '', '2020-02-27 00:57:20', 18),
+(24, 'TRN001', 1, 1, 1, 8, '650 Jean-D\'Estrees apt 807', 0, 'Carmen', 'Voyagine Inc', 'Carmen', 'Carmen Gagnon', 'TRN001', '', 'voyagine@hotmail.com', '', '', '05149836594', 'H3C0G3', 'H3C0G3', '', '', '', '2021-03-01 19:52:58', 23),
 (25, 'TRN002', 1, 0, 1, 2, '11700 Racette', 0, 'M. Just', 'Hotel Association', 'Muriel', 'Muriel', 'TRN002', '', 'voyagine@hotmail.com', '', '', '5149836594', 'H1G 5J5', 'H1G 5J5', '', '', '', '2021-02-09 21:13:38', 23),
 (26, 'TRN50', 1, 1, 1, 1, '67 Home Drive', 0, 'M. Untel', 'Jewel int.', '', '', 'TRN50', '', 'jewel@gmail.com', '4567899', '', '', '', '', 'dfdfsdfd', '', '', '2020-05-23 00:13:41', 28),
 (28, '123456789', 1, 0, 1, 1, 'dfdfd', 0, 'dfdfdf', 'fdfd', '', '', '123456789', '', 'nicholasjumpp1@gmail.com', '', '', '', '', '', '', '', '', '2020-11-03 19:06:44', 23);
@@ -297,7 +287,7 @@ CREATE TABLE IF NOT EXISTS `consultation` (
 
 INSERT INTO `consultation` (`id`, `consultation_no`, `clause_id`, `client_id`, `consultant_id`, `phase_id`, `program_id`, `sector_id`, `standard_id`, `status_id`, `board_meeting_time_period`, `business_process`, `date_begin`, `date_creation`, `date_end`, `description`, `exemption`, `management_review_time`, `product`, `quality_policy`, `remark`, `updated_date`, `updated_by`) VALUES
 (31, 'CON01', 11, 24, '[\"29\",\"30\"]', 1, 8, 4, 2, 11, '', '', '2020-02-27', '2020-02-27', '0000-00-00', 'Consultation 1', '', '', '', '', '', '2020-09-25 21:23:11', 23),
-(32, 'CON02', 13, 25, '[\"29\"]', 2, 14, 4, 5, 21, '', '', '2020-02-27', '2020-02-27', '0000-00-00', 'Consultation 2', '', '', '', '', '', '2020-11-06 19:28:28', 23);
+(32, 'CON02', 13, 25, '[\"29\"]', 1, 14, 4, 5, 21, '', '', '2020-02-27', '2020-02-27', '0000-00-00', 'Consultation 2', '', '', '', '', '', '2021-03-26 20:18:34', 23);
 
 -- --------------------------------------------------------
 
@@ -479,21 +469,11 @@ CREATE TABLE IF NOT EXISTS `internal_cost_plan` (
   `date_updated` date NOT NULL,
   `updated_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `billing_item_id` (`billing_item_id`),
-  KEY `client_id` (`client_id`),
-  KEY `ta_id` (`ta_id`),
-  KEY `updated_by` (`updated_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `internal_cost_plan`
---
-
-INSERT INTO `internal_cost_plan` (`id`, `ta_id`, `client_id`, `billing_item_id`, `a_amount`, `date_updated`, `updated_by`) VALUES
-(6, 8, 24, 3, 11501, '2020-10-08', 23),
-(10, 8, 24, 3, 50, '2020-10-20', 23),
-(11, 8, 24, 2, 99000, '2021-02-11', 23),
-(12, 9, 25, 2, 93000, '2021-02-11', 23);
+  KEY `internal_cost_plan_ibfk_1` (`billing_item_id`),
+  KEY `internal_cost_plan_ibfk_2` (`client_id`),
+  KEY `internal_cost_plan_ibfk_3` (`ta_id`),
+  KEY `internal_cost_plan_ibfk_4` (`updated_by`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -515,7 +495,7 @@ CREATE TABLE IF NOT EXISTS `log` (
   `remark` text,
   `attributes` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=160 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=165 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `log`
@@ -619,7 +599,12 @@ INSERT INTO `log` (`id`, `user_id`, `timestamp`, `module`, `action`, `subject_id
 (157, 23, '2020-11-06 14:08:29', 'Consultation', 'Update', 32, 25, 32, NULL, 'Update Consultation CON02 and Move from phase Phase 2 to phase Phase 1', 'a:2:{s:3:\"old\";a:39:{s:2:\"id\";s:2:\"32\";s:15:\"consultation_no\";s:5:\"CON02\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:8:\"phase_id\";s:1:\"2\";s:10:\"program_id\";s:2:\"14\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:13:\"date_creation\";s:10:\"2020-02-27\";s:8:\"date_end\";s:10:\"0000-00-00\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:7:\"product\";s:0:\"\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-05 18:53:11\";s:10:\"updated_by\";s:5:\"admin\";s:7:\"address\";s:13:\"11700 Racette\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:13:\"director_name\";s:6:\"Muriel\";s:3:\"trn\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:7:\"website\";s:0:\"\";s:9:\"directory\";s:6:\"TRN002\";s:11:\"parish_name\";s:9:\"Clarendon\";s:10:\"phase_name\";s:7:\"Phase 2\";s:11:\"county_name\";s:8:\"Cornwall\";s:12:\"program_name\";s:12:\"spa standard\";}s:3:\"new\";a:21:{s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:15:\"consultation_no\";s:5:\"CON02\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:8:\"date_end\";s:0:\"\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:8:\"phase_id\";s:1:\"1\";s:7:\"product\";s:0:\"\";s:10:\"program_id\";s:2:\"14\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"11\";s:12:\"updated_date\";s:19:\"2020-11-06 14:08:29\";s:10:\"updated_by\";s:2:\"23\";}}'),
 (158, 23, '2020-11-06 14:28:28', 'Consultation', 'Update', 32, 25, 32, NULL, 'Update Consultation CON02 and Move from phase Phase 1 to phase Phase 2', 'a:2:{s:3:\"old\";a:39:{s:2:\"id\";s:2:\"32\";s:15:\"consultation_no\";s:5:\"CON02\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:8:\"phase_id\";s:1:\"1\";s:10:\"program_id\";s:2:\"14\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"11\";s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:13:\"date_creation\";s:10:\"2020-02-27\";s:8:\"date_end\";s:10:\"0000-00-00\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:7:\"product\";s:0:\"\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-06 14:08:29\";s:10:\"updated_by\";s:5:\"admin\";s:7:\"address\";s:13:\"11700 Racette\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:13:\"director_name\";s:6:\"Muriel\";s:3:\"trn\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:7:\"website\";s:0:\"\";s:9:\"directory\";s:6:\"TRN002\";s:11:\"parish_name\";s:9:\"Clarendon\";s:10:\"phase_name\";s:7:\"Phase 1\";s:11:\"county_name\";s:8:\"Cornwall\";s:12:\"program_name\";s:12:\"spa standard\";}s:3:\"new\";a:21:{s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:15:\"consultation_no\";s:5:\"CON02\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:8:\"date_end\";s:0:\"\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:8:\"phase_id\";s:1:\"2\";s:7:\"product\";s:0:\"\";s:10:\"program_id\";s:2:\"14\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:12:\"updated_date\";s:19:\"2020-11-06 14:28:28\";s:10:\"updated_by\";s:2:\"23\";}}');
 INSERT INTO `log` (`id`, `user_id`, `timestamp`, `module`, `action`, `subject_id`, `client_id`, `consultation_id`, `ta_id`, `remark`, `attributes`) VALUES
-(159, 23, '2021-02-09 16:13:38', 'Client', 'Update', 25, 25, NULL, NULL, 'Update Client TRN002', 'a:2:{s:3:\"old\";a:4:{i:0;a:25:{s:2:\"id\";s:2:\"28\";s:3:\"trn\";s:9:\"123456789\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:5:\"dfdfd\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:6:\"dfdfdf\";s:12:\"company_name\";s:4:\"fdfd\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:9:\"123456789\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:24:\"nicholasjumpp1@gmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-03 14:06:44\";s:10:\"updated_by\";s:2:\"23\";}i:1;a:25:{s:2:\"id\";s:2:\"25\";s:3:\"trn\";s:6:\"TRN002\";s:11:\"activity_id\";s:1:\"2\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"2\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:12:\"contact_name\";s:6:\"Muriel\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-09-28 14:38:31\";s:10:\"updated_by\";s:2:\"23\";}i:2;a:25:{s:2:\"id\";s:2:\"26\";s:3:\"trn\";s:5:\"TRN50\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"1\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:13:\"67 Home Drive\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:8:\"M. Untel\";s:12:\"company_name\";s:10:\"Jewel int.\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:5:\"TRN50\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:15:\"jewel@gmail.com\";s:6:\"mobile\";s:7:\"4567899\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:8:\"dfdfsdfd\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-05-22 19:13:41\";s:10:\"updated_by\";s:2:\"28\";}i:3;a:25:{s:2:\"id\";s:2:\"24\";s:3:\"trn\";s:6:\"TRN001\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"8\";s:7:\"address\";s:26:\"650 Jean-D\'Estrees apt 807\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:13:\"Carmen Gagnon\";s:12:\"company_name\";s:12:\"Voyagine Inc\";s:12:\"contact_name\";s:6:\"Carmen\";s:13:\"director_name\";s:13:\"Carmen Gagnon\";s:9:\"directory\";s:6:\"TRN001\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:11:\"05149836594\";s:10:\"postal_box\";s:6:\"H3C0G3\";s:11:\"postal_code\";s:6:\"H3C0G3\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-02-26 19:57:20\";s:10:\"updated_by\";s:2:\"18\";}}s:3:\"new\";a:23:{s:11:\"activity_id\";s:1:\"1\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"city_id\";s:0:\"\";s:12:\"company_name\";s:17:\"Hotel Association\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"contact_name\";s:6:\"Muriel\";s:9:\"county_id\";s:1:\"1\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:9:\"parish_id\";s:1:\"2\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:3:\"trn\";s:6:\"TRN002\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2021-02-09 16:13:38\";s:10:\"updated_by\";s:2:\"23\";}}');
+(159, 23, '2021-02-09 16:13:38', 'Client', 'Update', 25, 25, NULL, NULL, 'Update Client TRN002', 'a:2:{s:3:\"old\";a:4:{i:0;a:25:{s:2:\"id\";s:2:\"28\";s:3:\"trn\";s:9:\"123456789\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:5:\"dfdfd\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:6:\"dfdfdf\";s:12:\"company_name\";s:4:\"fdfd\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:9:\"123456789\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:24:\"nicholasjumpp1@gmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-03 14:06:44\";s:10:\"updated_by\";s:2:\"23\";}i:1;a:25:{s:2:\"id\";s:2:\"25\";s:3:\"trn\";s:6:\"TRN002\";s:11:\"activity_id\";s:1:\"2\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"2\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:12:\"contact_name\";s:6:\"Muriel\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-09-28 14:38:31\";s:10:\"updated_by\";s:2:\"23\";}i:2;a:25:{s:2:\"id\";s:2:\"26\";s:3:\"trn\";s:5:\"TRN50\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"1\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:13:\"67 Home Drive\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:8:\"M. Untel\";s:12:\"company_name\";s:10:\"Jewel int.\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:5:\"TRN50\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:15:\"jewel@gmail.com\";s:6:\"mobile\";s:7:\"4567899\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:8:\"dfdfsdfd\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-05-22 19:13:41\";s:10:\"updated_by\";s:2:\"28\";}i:3;a:25:{s:2:\"id\";s:2:\"24\";s:3:\"trn\";s:6:\"TRN001\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"8\";s:7:\"address\";s:26:\"650 Jean-D\'Estrees apt 807\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:13:\"Carmen Gagnon\";s:12:\"company_name\";s:12:\"Voyagine Inc\";s:12:\"contact_name\";s:6:\"Carmen\";s:13:\"director_name\";s:13:\"Carmen Gagnon\";s:9:\"directory\";s:6:\"TRN001\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:11:\"05149836594\";s:10:\"postal_box\";s:6:\"H3C0G3\";s:11:\"postal_code\";s:6:\"H3C0G3\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-02-26 19:57:20\";s:10:\"updated_by\";s:2:\"18\";}}s:3:\"new\";a:23:{s:11:\"activity_id\";s:1:\"1\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"city_id\";s:0:\"\";s:12:\"company_name\";s:17:\"Hotel Association\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"contact_name\";s:6:\"Muriel\";s:9:\"county_id\";s:1:\"1\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:9:\"parish_id\";s:1:\"2\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:3:\"trn\";s:6:\"TRN002\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2021-02-09 16:13:38\";s:10:\"updated_by\";s:2:\"23\";}}'),
+(160, 23, '2021-03-01 14:52:58', 'Client', 'Update', 24, 24, NULL, NULL, 'Update Client TRN001', 'a:2:{s:3:\"old\";a:4:{i:0;a:25:{s:2:\"id\";s:2:\"28\";s:3:\"trn\";s:9:\"123456789\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:5:\"dfdfd\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:6:\"dfdfdf\";s:12:\"company_name\";s:4:\"fdfd\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:9:\"123456789\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:24:\"nicholasjumpp1@gmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-03 14:06:44\";s:10:\"updated_by\";s:2:\"23\";}i:1;a:25:{s:2:\"id\";s:2:\"25\";s:3:\"trn\";s:6:\"TRN002\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"2\";s:7:\"address\";s:13:\"11700 Racette\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:12:\"contact_name\";s:6:\"Muriel\";s:13:\"director_name\";s:6:\"Muriel\";s:9:\"directory\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:10:\"postal_box\";s:7:\"H1G 5J5\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2021-02-09 16:13:38\";s:10:\"updated_by\";s:2:\"23\";}i:2;a:25:{s:2:\"id\";s:2:\"26\";s:3:\"trn\";s:5:\"TRN50\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"1\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"1\";s:7:\"address\";s:13:\"67 Home Drive\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:8:\"M. Untel\";s:12:\"company_name\";s:10:\"Jewel int.\";s:12:\"contact_name\";s:0:\"\";s:13:\"director_name\";s:0:\"\";s:9:\"directory\";s:5:\"TRN50\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:15:\"jewel@gmail.com\";s:6:\"mobile\";s:7:\"4567899\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:0:\"\";s:10:\"postal_box\";s:0:\"\";s:11:\"postal_code\";s:0:\"\";s:6:\"remark\";s:8:\"dfdfsdfd\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-05-22 19:13:41\";s:10:\"updated_by\";s:2:\"28\";}i:3;a:25:{s:2:\"id\";s:2:\"24\";s:3:\"trn\";s:6:\"TRN001\";s:11:\"activity_id\";s:1:\"1\";s:7:\"city_id\";s:1:\"0\";s:9:\"county_id\";s:1:\"1\";s:9:\"parish_id\";s:1:\"8\";s:7:\"address\";s:26:\"650 Jean-D\'Estrees apt 807\";s:7:\"attempt\";s:1:\"0\";s:11:\"client_name\";s:13:\"Carmen Gagnon\";s:12:\"company_name\";s:12:\"Voyagine Inc\";s:12:\"contact_name\";s:6:\"Carmen\";s:13:\"director_name\";s:13:\"Carmen Gagnon\";s:9:\"directory\";s:6:\"TRN001\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:5:\"phone\";s:11:\"05149836594\";s:10:\"postal_box\";s:6:\"H3C0G3\";s:11:\"postal_code\";s:6:\"H3C0G3\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-02-26 19:57:20\";s:10:\"updated_by\";s:2:\"18\";}}s:3:\"new\";a:23:{s:11:\"activity_id\";s:1:\"1\";s:7:\"address\";s:26:\"650 Jean-D\'Estrees apt 807\";s:7:\"city_id\";s:1:\"1\";s:12:\"company_name\";s:12:\"Voyagine Inc\";s:11:\"client_name\";s:6:\"Carmen\";s:12:\"contact_name\";s:6:\"Carmen\";s:9:\"county_id\";s:1:\"1\";s:13:\"director_name\";s:13:\"Carmen Gagnon\";s:9:\"directory\";s:6:\"TRN001\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:9:\"objective\";s:0:\"\";s:9:\"parish_id\";s:1:\"8\";s:5:\"phone\";s:11:\"05149836594\";s:10:\"postal_box\";s:6:\"H3C0G3\";s:11:\"postal_code\";s:6:\"H3C0G3\";s:6:\"remark\";s:0:\"\";s:6:\"target\";s:0:\"\";s:3:\"trn\";s:6:\"TRN001\";s:7:\"website\";s:0:\"\";s:12:\"updated_date\";s:19:\"2021-03-01 14:52:58\";s:10:\"updated_by\";s:2:\"23\";}}'),
+(161, 23, '2021-03-01 14:59:24', 'Technical Advice', 'Create', 10, 26, NULL, NULL, 'Create Technical Advice 10', 'a:8:{s:9:\"client_id\";s:2:\"26\";s:13:\"consultant_id\";s:11:\"[\"29\",\"30\"]\";s:8:\"activity\";s:1:\"1\";s:12:\"date_created\";s:10:\"2021-03-01\";s:10:\"date_begin\";s:10:\"2021-03-02\";s:10:\"date_ended\";s:10:\"2021-04-01\";s:10:\"work_scope\";s:7:\"Testing\";s:10:\"updated_by\";s:2:\"23\";}'),
+(162, 23, '2021-03-01 15:25:39', 'Technical Advice', 'Create', 11, 25, NULL, NULL, 'Create Technical Advice 11', 'a:8:{s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:4:\"null\";s:8:\"activity\";s:1:\"1\";s:12:\"date_created\";s:10:\"2021-03-01\";s:10:\"date_begin\";s:0:\"\";s:10:\"date_ended\";s:0:\"\";s:10:\"work_scope\";s:0:\"\";s:10:\"updated_by\";s:2:\"23\";}'),
+(163, 23, '2021-03-03 20:04:11', 'Technical Advice', 'Create', 1, 25, NULL, NULL, 'Create Technical Advice 1', 'a:8:{s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:4:\"null\";s:8:\"activity\";s:1:\"1\";s:12:\"date_created\";s:10:\"2021-03-03\";s:10:\"date_begin\";s:10:\"2021-03-04\";s:10:\"date_ended\";s:10:\"2021-03-25\";s:10:\"work_scope\";s:0:\"\";s:10:\"updated_by\";s:2:\"23\";}'),
+(164, 23, '2021-03-26 15:18:34', 'Consultation', 'Update', 32, 25, 32, NULL, 'Update Consultation CON02 and Move from phase Phase 2 to phase Phase 1', 'a:2:{s:3:\"old\";a:39:{s:2:\"id\";s:2:\"32\";s:15:\"consultation_no\";s:5:\"CON02\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:8:\"phase_id\";s:1:\"2\";s:10:\"program_id\";s:2:\"14\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:13:\"date_creation\";s:10:\"2020-02-27\";s:8:\"date_end\";s:10:\"0000-00-00\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:7:\"product\";s:0:\"\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:12:\"updated_date\";s:19:\"2020-11-06 14:28:28\";s:10:\"updated_by\";s:5:\"admin\";s:7:\"address\";s:13:\"11700 Racette\";s:11:\"client_name\";s:7:\"M. Just\";s:12:\"company_name\";s:17:\"Hotel Association\";s:13:\"director_name\";s:6:\"Muriel\";s:3:\"trn\";s:6:\"TRN002\";s:8:\"district\";s:0:\"\";s:5:\"email\";s:20:\"voyagine@hotmail.com\";s:6:\"mobile\";s:0:\"\";s:5:\"phone\";s:10:\"5149836594\";s:11:\"postal_code\";s:7:\"H1G 5J5\";s:7:\"website\";s:0:\"\";s:9:\"directory\";s:6:\"TRN002\";s:11:\"parish_name\";s:9:\"Clarendon\";s:10:\"phase_name\";s:7:\"Phase 2\";s:11:\"county_name\";s:8:\"Cornwall\";s:12:\"program_name\";s:12:\"spa standard\";}s:3:\"new\";a:21:{s:25:\"board_meeting_time_period\";s:0:\"\";s:16:\"business_process\";s:0:\"\";s:9:\"clause_id\";s:2:\"13\";s:9:\"client_id\";s:2:\"25\";s:13:\"consultant_id\";s:6:\"[\"29\"]\";s:15:\"consultation_no\";s:5:\"CON02\";s:10:\"date_begin\";s:10:\"2020-02-27\";s:8:\"date_end\";s:0:\"\";s:11:\"description\";s:14:\"Consultation 2\";s:9:\"exemption\";s:0:\"\";s:22:\"management_review_time\";s:0:\"\";s:8:\"phase_id\";s:1:\"1\";s:7:\"product\";s:0:\"\";s:10:\"program_id\";s:2:\"14\";s:14:\"quality_policy\";s:0:\"\";s:6:\"remark\";s:0:\"\";s:9:\"sector_id\";s:1:\"4\";s:11:\"standard_id\";s:1:\"5\";s:9:\"status_id\";s:2:\"21\";s:12:\"updated_date\";s:19:\"2021-03-26 15:18:34\";s:10:\"updated_by\";s:2:\"23\";}}');
 
 -- --------------------------------------------------------
 
@@ -814,7 +799,7 @@ CREATE TABLE IF NOT EXISTS `program_phase` (
   `sequence` tinyint(4) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `program_id` (`program_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=90 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=91 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `program_phase`
@@ -832,7 +817,8 @@ INSERT INTO `program_phase` (`id`, `program_id`, `phase_id`, `sequence`) VALUES
 (86, 13, 7, 3),
 (87, 14, 1, 0),
 (88, 14, 2, 0),
-(89, 14, 3, 0);
+(89, 14, 3, 0),
+(90, 14, 4, 0);
 
 -- --------------------------------------------------------
 
@@ -861,26 +847,122 @@ CREATE TABLE IF NOT EXISTS `question` (
   KEY `program_id` (`program_id`),
   KEY `phase_id` (`phase_id`),
   KEY `standard_id` (`standard_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=216 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `question`
 --
 
 INSERT INTO `question` (`id`, `question`, `question_type_id`, `remark`, `active`, `upload_document`, `program_id`, `phase_id`, `standard_id`, `clause_id`, `sub_clause_id`, `upload_date`, `updated_by`) VALUES
-(14, 'What is your primary customers/ target markets for your services?', 2, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-04 15:47:44', 23),
-(15, 'How long has your company been in operation?', 1, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 15:48:32', 23),
-(17, 'State other agencies with whom your company is registered.', 1, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:05:04', 23),
-(18, 'State the number of employees in the company', 1, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:06:36', 23),
-(19, 'State the size of the establishment facility (m^2)', 1, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:07:08', 23),
-(20, 'State total investment in equipment used.', 1, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:07:50', 23),
-(21, 'Are your operations guided by any of the following?', 6, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:08:49', 23),
-(23, 'Do you have a quality manual/ policy manual?', 4, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:10:47', 23),
-(25, 'What are your services offered or where can this information be found?', 1, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:12:50', 23),
-(27, 'Has management defined the scope of services provided?', 4, '', 1, 2, 14, 1, 6, 0, 0, '2020-11-04 16:16:47', 23),
-(28, 'What is the status of value chain services with respect to business processes?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-04 16:25:18', 23),
-(29, 'What are the results of the internal audit?', 1, '', 1, 2, 14, 3, 6, 0, 0, '2020-11-04 16:25:50', 23),
-(30, 'This is a test for the drop down list', 5, '', 1, 2, 14, 2, 6, 0, 0, '2020-11-05 18:53:01', 23);
+(31, ' State your primary customers/target markets for your services:', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-06 23:16:35', 23),
+(33, 'How long has your company been in operation?', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-06 23:22:21', 23),
+(34, 'Is the Company Registered with the Registrar of Companies?', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-06 23:25:16', 23),
+(38, 'State Other Agencies with whom your company is registered:', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-06 23:35:52', 23),
+(45, 'State the Number of Employees in the company:', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:34:40', 23),
+(46, 'State the size of the establishment facility (m2 ):', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:38:13', 23),
+(47, 'State total investment in equipment used:', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:38:37', 23),
+(48, 'Are your operations guided by Documented Standard Operating Procedures', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:39:13', 23),
+(49, 'Are your operations guided by a Quality Manual/Policy Manual', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:39:43', 23),
+(50, 'Are your operations guided by a Best Practices Manual', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:40:41', 23),
+(51, 'State services offered (or list a source where this information may be found):', 1, '', 1, 1, 14, 1, 6, 0, 0, '2020-11-18 19:41:57', 23),
+(52, 'Has management made a decision to adapt/adopt the Quality Manual Template provided?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-18 19:43:46', 23),
+(53, 'Has management defines the scope of services provided ?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-18 19:45:13', 23),
+(54, 'Is there a value chain mapping of services with inputs, outputs, control points and support services used/needed? ( Should have been adopted/adapted from Manual)', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-18 19:58:56', 23),
+(58, 'Has management developed a quality policy?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-23 19:15:38', 23),
+(59, 'Has management defined its quality objectives?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-23 19:16:26', 23),
+(60, 'Is there a listing of all the documents that will be used in the management system?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-23 19:21:35', 23),
+(62, 'Is there a database and or record keeping system in place?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-23 19:24:47', 23),
+(63, 'Has management implemented standard operating procedures?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-23 19:25:20', 23),
+(64, 'Has management implemented /followed a system of internal evaluation of spa performance?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-23 19:25:56', 23),
+(126, 'Is there a policy in place to hire trained and certified individuals to fill staffing positions?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:24:45', 23),
+(127, 'Has the organization developed and displayed its code of ethics?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:25:51', 23),
+(128, 'Does the organization have evidence that it has complied with all regulatory requirements?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:26:13', 23),
+(129, 'Has the Spa developed an operational manual?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:26:50', 23),
+(130, 'Is there a waiver form in use?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:27:26', 23),
+(131, 'Is there a policy in place to investigate water borne illnesses and outbreaks?', 1, '', 1, 1, 9, 2, 6, 0, 0, '2020-11-24 19:28:47', 23),
+(132, 'Is there a policy in place to investigate water borne illnesses and outbreaks?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:29:57', 23),
+(133, 'Is there a policy in place to all spas and swimming pools provide dressing rooms, toilets, lavatories and hose bibs?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:31:53', 23),
+(134, 'Are all spas and swimming pools provided with dressing rooms, toilets, lavatories and hose bibs?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:32:27', 23),
+(135, 'Is there a policy in place to ensure that hospitality/water stations are easily accessible and stocked with water, reusable or disposable cups at all times?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 19:39:52', 23),
+(136, 'Is there an appointment scheduling system in place?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:56:25', 23),
+(137, 'Are clients reminded of appointments?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:56:49', 23),
+(138, 'Is the staff compliment on a daily basis adequate to deliver the needs for the services offered?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:57:16', 23),
+(139, 'Is there a treatment time specified for each service?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:57:51', 23),
+(140, 'Does the waiting time before a scheduled service exceed 15 minutes?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:58:26', 23),
+(141, 'Is the reception or front desk staff trained in customer service?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:58:55', 23),
+(142, 'Are there certified instructors on staff for personal training and or use of gym equipment?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:59:23', 23),
+(143, 'Are customer complaints or grievances recorded?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 20:59:49', 23),
+(144, 'Are customer complaints resolved within the time they are received?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:00:20', 23),
+(145, 'Are customer complaints resolved by management?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:00:53', 23),
+(146, 'Are there documented operating procedures in place governing employee safety?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:04:58', 23),
+(147, 'Do operating procedures give consideration to clients with disabilities?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:05:14', 23),
+(148, 'Are there policies and procedures for cleaning and sanitizing equipment?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:05:43', 23),
+(149, 'Is there a procedure for the use of sheets and towels?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:05:58', 23),
+(150, 'Are tools and equipment sterilized between uses?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:06:35', 23),
+(151, 'Are your treatment rooms equipped with hand washing facilities (including liquid hand soap and paper towel)?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:07:01', 23),
+(152, 'Does the spa monitor water quality based requirements in the MOH Recreational Water Quality Monitoring Programme (RWQMP) and the MOH RWQMP Guidelines for Special Swimming Pools?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:07:42', 23),
+(153, 'Does the Spa measure and monitor the maximum temperature of your heated spa pool?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:22:06', 23),
+(154, 'Does the Spa measure and monitor the minimum temperature of your cold plunge pool?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:32:36', 23),
+(155, 'Are records of monitoring maintained and made available upon request?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:33:04', 23),
+(156, 'Are hot tubs cleaned on a weekly basis?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:33:40', 23),
+(157, 'Is there a system in place to maintain records and report to the relevant authorities any death, injury or illness which occurs at the pool or spa according to the Public Health Act (Swimming Pools) Regulations, 2000?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:34:11', 23),
+(158, 'Is there a system in place to maintain records and report to the relevant authorities any death, injury or illness which occurs at the pool or spa according to the Public Health Act (Swimming Pools) Regulations, 2000?', 1, '', 1, 1, 9, 2, 6, 0, 0, '2020-11-24 21:35:00', 23),
+(159, 'Does the company have any of the pools for recreation or therapeutic use?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:52:29', 23),
+(160, 'Does the company test and monitor water quality for these facilities?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:53:15', 23),
+(161, 'Are the parameters with the limits set by the Jamaica Spa Standards?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:53:47', 23),
+(163, 'Has the company identified the processes needed for water chemistry records to be maintained, kept on file and made available upon request?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:54:38', 23),
+(164, 'Has the company determined the criteria and methods needed to ensure that both the operation and control of these processes are effective.', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:55:19', 23),
+(165, 'Has the company ensured the availability of resources and information necessary to support the operation and monitoring of these processes?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:56:33', 23),
+(166, 'Are the methods used for all tests internationally accepted standard methods?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 21:57:18', 23),
+(167, 'Are all relevant signage and pool markings in accordance with the Public Health Act (Swimming Pools) Regulations, 2000?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:09:42', 23),
+(168, 'Where there is unsupervised use of equipment or products, are signs or labels with instructions for use shall be posted?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:10:21', 23),
+(169, 'Are there appropriate signage posted where necessary to alert persons to possible risks and operational procedures?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:11:03', 23),
+(170, 'Does the Spa have a written emergency plane in place?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:20:18', 23),
+(171, 'Has the Spa conducted staff orientation training/briefing of the detail of all emergency plans?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:20:40', 23),
+(172, 'Are Emergency routes prominently posted?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:20:57', 23),
+(173, 'Are staff made aware of the location of first aid kit(s)?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 22:21:34', 23),
+(174, 'Is there a member of staff who is trained in first, emergency and life saving procedures?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:08:27', 23),
+(175, 'Does the Spa provide a telephone within one minute access?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:09:05', 23),
+(176, 'Does the Spa provide  an alternate means of reaching emergency medical service response numbers?', 2, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:11:23', 23),
+(177, 'Does the Spa provide  provision of an audible emergency alarm to alert others of a need for emergency response?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:18:08', 23),
+(178, 'Does the company have an updated Public Health inspection form', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:20:26', 23),
+(179, 'Do all persons serving food and beverages have a valid Public Health Food Handler’s Permit?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:21:16', 23),
+(180, 'Does the spa menu have food high in nutritional value?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:21:50', 23),
+(181, 'Does the spa menu have food low in sugar, fat and sodium?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:22:31', 23),
+(182, 'Does the spa menu have food  varied and attractively presented?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:23:39', 23),
+(183, 'Is Information regarding all major ingredients used in the preparation of meals made available to guests upon requests?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-24 23:24:05', 23),
+(184, 'Is Information regarding all major ingredients used in the preparation of meals made available to guests upon requests?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:50:12', 23),
+(185, 'Is there a dress code stipulated by the organization?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:52:36', 23),
+(186, 'Are staff license renewed annually in conformances with the public health act? (Hairdressers, beauty therapist, cosmetologist and beauty salons)', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:53:04', 23),
+(187, 'Is there a first aid kit accessible to staff?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:53:45', 23),
+(188, 'Are the methods of sanitation when performing a service in keeping with the public health act? (Hairdressers, beauty therapist, cosmetologist, beauty salons)', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:54:07', 23),
+(189, 'Are all the employees’ holders of updated license relevant to the services, which they perform?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:59:16', 23),
+(190, 'Are roles responsibilities and authorities defined and documented to ensure effectiveness of staff assigned duties?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 00:59:37', 23),
+(191, 'Are all employees meeting the requirements for quality, environmental and occupational safety and health, for products and services that they control and over which they are expected to have an influence?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 01:00:08', 23),
+(192, 'Are employees trained in administering first aid?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 01:00:31', 23),
+(193, 'Are the appropriate numbers of staff trained and certified in emergency and life saving procedures as outlined in Clause 8.5 of the Jamaica spa standards?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 01:00:48', 23),
+(194, 'Are life guards employed certified by local licensing bodies?', 1, '', 1, 1, 14, 2, 6, 0, 0, '2020-11-25 01:01:11', 23),
+(195, 'Status of the value chain services with respect to business processes:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:38:37', 23),
+(196, 'Types of inputs:', 1, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:39:52', 23),
+(197, 'Types of outputs:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:41:24', 23),
+(198, 'Control Points:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:42:00', 23),
+(199, 'Support Services:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:42:34', 23),
+(200, 'What are the results of the internal audit?', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:44:32', 23),
+(201, 'Number of Non-conformancies that are open:', 1, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:46:07', 23),
+(202, 'Number of Non-conformancies that are closed:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:52:02', 23),
+(203, 'Number of documents being managed:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:52:39', 23),
+(204, 'Document status update percentage:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:53:21', 23),
+(205, 'Timeline for non-conformance deliverables:', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:54:11', 23),
+(206, 'What is the competence requirement of the staff?', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:54:31', 23),
+(207, 'What percentage of the staff is competent?', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:54:53', 23),
+(208, 'Is there documentation of their competencies?', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:55:10', 23),
+(209, 'Is there a competence improvement plan for staff?', 2, '', 1, 1, 14, 3, 6, 0, 0, '2020-11-25 20:55:33', 23),
+(210, 'Are the QEMS documents accessible to employees?', 2, '', 1, 1, 14, 4, 6, 0, 0, '2020-11-25 21:04:01', 23),
+(211, 'Are the QEMS documents secured (backup and restoration available)?', 2, '', 1, 1, 14, 4, 6, 0, 0, '2020-11-25 21:04:22', 23),
+(212, 'Is there a risk management system?', 2, '', 1, 1, 14, 4, 6, 0, 0, '2020-11-25 21:08:03', 23),
+(213, 'Are risk registers maintained?', 2, '', 1, 1, 14, 4, 6, 0, 0, '2020-11-25 21:09:55', 23),
+(214, 'Are the QEMS documents categorized and controlled?', 2, '', 1, 1, 14, 4, 6, 0, 0, '2020-11-25 21:11:26', 23),
+(215, 'Person responsible for managing the QEMS:', 2, '', 1, 1, 14, 4, 6, 0, 0, '2020-11-25 21:12:46', 23);
 
 -- --------------------------------------------------------
 
@@ -896,20 +978,6 @@ CREATE TABLE IF NOT EXISTS `question_option` (
   PRIMARY KEY (`id`),
   KEY `question_id` (`question_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `question_option`
---
-
-INSERT INTO `question_option` (`id`, `question_id`, `ques_option`) VALUES
-(14, 27, 'Yes'),
-(15, 27, 'No'),
-(25, 23, 'YAAAAAAAAAAS'),
-(26, 23, 'Maybe'),
-(30, 30, 'Yes'),
-(31, 30, 'No'),
-(32, 30, 'Maybe'),
-(33, 30, 'LOOOL you thought');
 
 -- --------------------------------------------------------
 
@@ -1257,18 +1325,15 @@ CREATE TABLE IF NOT EXISTS `technical_advice` (
   `date_ended` date DEFAULT NULL,
   `work_scope` text,
   `updated_by` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `client_id` (`client_id`),
-  KEY `activity` (`activity`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `technical_advice`
 --
 
 INSERT INTO `technical_advice` (`id`, `client_id`, `consultant_id`, `activity`, `date_created`, `date_begin`, `date_ended`, `work_scope`, `updated_by`) VALUES
-(8, 24, '[\"31\"]', 1, '2020-09-28', '2020-09-29', '2020-10-26', 'hsdfhskglhsjklghsalkgsa', 23),
-(9, 25, '[\"30\"]', 1, '2020-10-14', '2020-10-22', '2020-10-31', '', 23);
+(1, 25, 'null', 1, '2021-03-03', '2021-03-04', '2021-03-25', '', 23);
 
 -- --------------------------------------------------------
 
@@ -1324,15 +1389,9 @@ CREATE TABLE IF NOT EXISTS `workplan` (
   `start_date` date DEFAULT NULL,
   `end_date` date DEFAULT NULL,
   `updated_by` int(11) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `workplan`
---
-
-INSERT INTO `workplan` (`id`, `client_id`, `ta_id`, `major_deliverable`, `start_date`, `end_date`, `updated_by`) VALUES
-(3, 24, 8, 'Buy A Car 123456', '2021-02-27', '2021-03-12', 23);
+  PRIMARY KEY (`id`),
+  KEY `ta_id` (`ta_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1348,15 +1407,8 @@ CREATE TABLE IF NOT EXISTS `workplan_monitoring` (
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int(11) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `wid` (`wid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `workplan_monitoring`
---
-
-INSERT INTO `workplan_monitoring` (`id`, `wid`, `notes`, `date`, `created_by`) VALUES
-(1, 3, 'Test no 3', '2021-02-26 17:30:28', 23);
+  KEY `workplan_monitoring_ibfk_1` (`wid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1377,8 +1429,8 @@ CREATE TABLE IF NOT EXISTS `workplan_task` (
   `e_date` date DEFAULT NULL,
   `status_id` text,
   PRIMARY KEY (`id`),
-  KEY `wid` (`wid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+  KEY `workplan_task_ibfk_1` (`wid`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Constraints for dumped tables
@@ -1395,10 +1447,10 @@ ALTER TABLE `answer`
 -- Constraints for table `internal_cost_plan`
 --
 ALTER TABLE `internal_cost_plan`
-  ADD CONSTRAINT `internal_cost_plan_ibfk_1` FOREIGN KEY (`billing_item_id`) REFERENCES `billing_item` (`id`),
-  ADD CONSTRAINT `internal_cost_plan_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`),
-  ADD CONSTRAINT `internal_cost_plan_ibfk_3` FOREIGN KEY (`ta_id`) REFERENCES `technical_advice` (`id`),
-  ADD CONSTRAINT `internal_cost_plan_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`);
+  ADD CONSTRAINT `internal_cost_plan_ibfk_1` FOREIGN KEY (`billing_item_id`) REFERENCES `billing_item` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `internal_cost_plan_ibfk_2` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `internal_cost_plan_ibfk_3` FOREIGN KEY (`ta_id`) REFERENCES `technical_advice` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `internal_cost_plan_ibfk_4` FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `question_option`
@@ -1407,23 +1459,22 @@ ALTER TABLE `question_option`
   ADD CONSTRAINT `question_option_ibfk_1` FOREIGN KEY (`question_id`) REFERENCES `question` (`id`);
 
 --
--- Constraints for table `technical_advice`
+-- Constraints for table `workplan`
 --
-ALTER TABLE `technical_advice`
-  ADD CONSTRAINT `technical_advice_ibfk_1` FOREIGN KEY (`client_id`) REFERENCES `client` (`id`),
-  ADD CONSTRAINT `technical_advice_ibfk_2` FOREIGN KEY (`activity`) REFERENCES `activity` (`id`);
+ALTER TABLE `workplan`
+  ADD CONSTRAINT `workplan_ibfk_1` FOREIGN KEY (`ta_id`) REFERENCES `technical_advice` (`id`) ON DELETE CASCADE ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `workplan_monitoring`
 --
 ALTER TABLE `workplan_monitoring`
-  ADD CONSTRAINT `workplan_monitoring_ibfk_1` FOREIGN KEY (`wid`) REFERENCES `workplan` (`id`);
+  ADD CONSTRAINT `workplan_monitoring_ibfk_1` FOREIGN KEY (`wid`) REFERENCES `workplan` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `workplan_task`
 --
 ALTER TABLE `workplan_task`
-  ADD CONSTRAINT `workplan_task_ibfk_1` FOREIGN KEY (`wid`) REFERENCES `workplan` (`id`);
+  ADD CONSTRAINT `workplan_task_ibfk_1` FOREIGN KEY (`wid`) REFERENCES `workplan` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
