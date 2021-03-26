@@ -20,7 +20,7 @@ class Model_report extends CI_Model
 	}
 
 
-		public function getReportInfo ($report_code)
+	public function getReportInfo($report_code)
 	{
 
 		$sql = "SELECT report_code,report_title
@@ -51,7 +51,6 @@ class Model_report extends CI_Model
 		WHERE consultation.id = ?";
 		$query = $this->db->query($sql, array($consultation_id));
 		return $query->result();
-
 	}
 
 
@@ -69,7 +68,6 @@ class Model_report extends CI_Model
 		WHERE client.id = ?";
 		$query = $this->db->query($sql, array($client_id));
 		return $query->result();
-
 	}
 
 	//--> print consultation of client
@@ -91,7 +89,6 @@ class Model_report extends CI_Model
 		ORDER BY consultation_no";
 		$query = $this->db->query($sql, array($client_id));
 		return $query->result();
-
 	}
 
 
@@ -123,86 +120,88 @@ class Model_report extends CI_Model
 		$query = $this->db->query($sql, array($client_id));
 		return $query->result();
 	}
-	
 
-// Generates the company name
-public function getReportWorkPlanCompany($id)
-{
-	$sql = "SELECT workplan.client_id,client.company_name AS 'company_name' 
+
+	// Generates the company name
+	public function getReportWorkPlanCompany($id)
+	{
+		$sql = "SELECT workplan.client_id,client.company_name AS 'company_name' 
 	FROM workplan
 	JOIN client ON workplan.client_id = client.id
 	WHERE workplan.id=?";
-	$query = $this->db->query($sql, array($id));
-	return $query->result();	
-}
+		$query = $this->db->query($sql, array($id));
+		return $query->result();
+	}
 
-
-// Generates the major deliverables for the workplan
-	public function getReportWorkPland($id)
+	// Generates the major deliverables for the workplan
+	public function getReportWorkPlanDeliverable($id)
 	{
-
-
 		$sql = "SELECT workplan.*
   		FROM workplan 
 		WHERE workplan.id = ?";
 		$query = $this->db->query($sql, array($id));
 		return $query->result();
-
-		
-	}
-
-// Generates the tasks for the workplan
-	public function getReportWorkPlant($id)
-	{
-		$sql = "SELECT workplan_task.task AS 'task', workplan_task.entity AS 'entity' ,
- 		workplan_task.responsible_officer AS 'responsible_officer', workplan_task.email AS 'email', 
- 		workplan_task.phone AS 'phone', workplan_task.s_date AS 's_date',
-		workplan_task.e_date AS 'e_date'
-  		FROM workplan_task
-		WHERE workplan_task.wid = ?";
-		$query = $this->db->query($sql, array($id));
-		return $query->result();
-
-		
 	}
 
 	// Generates the tasks for the workplan
-	public function getReportWorkPlann($id)
+	public function getReportWorkPlanTask($id)
 	{
+		$sql = "SELECT * FROM workplan_task
+		WHERE workplan_task.wid = ?";
+		$query = $this->db->query($sql, array($id));
+		return $query->result();
+	}
 
-
+	// Generates the tasks for the workplan
+	public function getReportWorkPlanNote($id)
+	{
 		$sql = "SELECT workplan_monitoring.notes AS 'notes', workplan_monitoring.date AS 'date', 
 		workplan_monitoring.created_by AS 'created_by'
   		FROM workplan_monitoring
 		WHERE workplan_monitoring.wid = ?";
-		
+
 		$query = $this->db->query($sql, array($id));
 		return $query->result();
-
-		
 	}
 
-	
+	public function getWorkPlanClientData($id)
+	{
+		$sql = "SELECT DISTINCT client.company_name AS 'company_name' 
+	FROM workplan
+	JOIN client ON workplan.client_id = client.id
+	WHERE workplan.ta_id=?";
+		$query = $this->db->query($sql, array($id));
+		return $query->row_array();
+	}
+
+	// Generates the major deliverables for the workplan
+	public function getReportWorkPlanDeliverables($id)
+	{
+		$sql = "SELECT workplan.*
+  		FROM workplan 
+		WHERE workplan.ta_id = ?";
+		$query = $this->db->query($sql, array($id));
+		return $query->result();
+	}
+
 	public function get_REP01()
 	{
 		//--> Criteria County
 		$county = $this->session->county;
-        if ($county == 'all') {
-        	$county_from = 0;
+		if ($county == 'all') {
+			$county_from = 0;
 			$county_to = 999;
-        }
-        else {
+		} else {
 			$county_from = $county;
 			$county_to = $county;
 		}
 
 		//--> Criteria Parish
 		$parish = $this->session->parish;
-        if ($parish == 'all') {
-        	$parish_from = 0;
+		if ($parish == 'all') {
+			$parish_from = 0;
 			$parish_to = 999;
-        }
-        else {
+		} else {
 			$parish_from = $parish;
 			$parish_to = $parish;
 		}
@@ -219,10 +218,11 @@ public function getReportWorkPlanCompany($id)
 
 		$query = $this->db->query($sql, array());
 
-		if ($query->num_rows() > 0) {return $query->result();}
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		}
 
 		return NULL;
-
 	}
 
 
@@ -230,22 +230,20 @@ public function getReportWorkPlanCompany($id)
 	{
 		//--> Criteria Phase
 		$phase = $this->session->phase;
-        if ($phase == 'all') {
-        	$phase_from = 0;
+		if ($phase == 'all') {
+			$phase_from = 0;
 			$phase_to = 999;
-        }
-        else {
+		} else {
 			$phase_from = $phase;
 			$phase_to = $phase;
 		}
 
 		//--> Criteria Status
 		$status = $this->session->status;
-        if ($status == 'all') {
-        	$status_from = 0;
+		if ($status == 'all') {
+			$status_from = 0;
 			$status_to = 999;
-        }
-        else {
+		} else {
 			$status_from = $status;
 			$status_to = $status;
 		}
@@ -253,39 +251,46 @@ public function getReportWorkPlanCompany($id)
 
 		//--> Criteria Standard
 		$standard = $this->session->standard;
-        if ($standard == 'all') {
-        	$standard_from = 0;
+		if ($standard == 'all') {
+			$standard_from = 0;
 			$standard_to = 999;
-        }
-        else {
+		} else {
 			$standard_from = $standard;
 			$standard_to = $standard;
 		}
 
 		//--> Criteria Sector
 		$sector = $this->session->sector;
-        if ($sector == 'all') {
-        	$sector_from = 0;
+		if ($sector == 'all') {
+			$sector_from = 0;
 			$sector_to = 999;
-        }
-        else {
+		} else {
 			$sector_from = $sector;
-			$sector_to = $sector;		}
+			$sector_to = $sector;
+		}
 
 
 
 		//--> Criteria date
 		$date_creation_from = $this->session->date_creation_from;
 		$date_creation_to = $this->session->date_creation_to;
-		if ($date_creation_from == null) {$date_creation_from = "'1900-01-01'";} else {$date_creation_from = "'".$date_creation_from."'";}
-		if ($date_creation_to == null) {$date_creation_to = "'2500-01-01'";} else {$date_creation_to = "'".$date_creation_to."'";}
+		if ($date_creation_from == null) {
+			$date_creation_from = "'1900-01-01'";
+		} else {
+			$date_creation_from = "'" . $date_creation_from . "'";
+		}
+		if ($date_creation_to == null) {
+			$date_creation_to = "'2500-01-01'";
+		} else {
+			$date_creation_to = "'" . $date_creation_to . "'";
+		}
 
 
 		//---> Get Consultant filter, if the user is a consultant,
-        //     we will generate a drop-down list empty
+		//     we will generate a drop-down list empty
 
-        if ($this->session->consultant == 'all') {
-        	$sql = "SELECT consultation.*,sector.name AS 'sector_name',
+		if ($this->session->consultant == 'all') {
+			$sql = "SELECT consultation.*,sector.name AS 'sector_name',
 						standard.name AS 'standard_name',company_name,
 						phase.name AS 'phase_name',status.name AS 'status_name'
 					FROM consultation
@@ -301,13 +306,12 @@ public function getReportWorkPlanCompany($id)
 						AND status_id BETWEEN $status_from AND $status_to
 						AND date_creation BETWEEN $date_creation_from AND $date_creation_to
 					ORDER BY company_name";
-            
-        } else {
-        	//Insert quote before and after the consultant_id for the where clause LIKE '%"1"%'
-        	//that search inside the field consultant_id.  It may contains more than one consultant.
-            $consultant = '"'.$this->session->consultant.'"';
+		} else {
+			//Insert quote before and after the consultant_id for the where clause LIKE '%"1"%'
+			//that search inside the field consultant_id.  It may contains more than one consultant.
+			$consultant = '"' . $this->session->consultant . '"';
 
-	    	$sql = "SELECT consultation.*,sector.name AS 'sector_name',
+			$sql = "SELECT consultation.*,sector.name AS 'sector_name',
 				standard.name AS 'standard_name',company_name,
 				phase.name AS 'phase_name',status.name AS 'status_name'
 			FROM consultation
@@ -324,7 +328,7 @@ public function getReportWorkPlanCompany($id)
 				AND date_creation BETWEEN $date_creation_from AND $date_creation_to
 			    AND consultation.consultant_id LIKE '%$consultant%'	
 			ORDER BY company_name";
-		}			
+		}
 
 		$query = $this->db->query($sql, array());
 
@@ -333,7 +337,6 @@ public function getReportWorkPlanCompany($id)
 		}
 
 		return NULL;
-
 	}
 
 
@@ -341,33 +344,39 @@ public function getReportWorkPlanCompany($id)
 	{
 
 		$inquiry_type = $this->session->inquiry_type;
-        if ($inquiry_type == 'all') {
-        	$inquiry_type_from = 0;
+		if ($inquiry_type == 'all') {
+			$inquiry_type_from = 0;
 			$inquiry_type_to = 999;
-        }
-        else {
+		} else {
 			$inquiry_type_from = $inquiry_type;
 			$inquiry_type_to = $inquiry_type;
 		}
 
 		$support_type = $this->session->support_type;
-        if ($support_type == 'all') {
-        	$support_type_from = 0;
+		if ($support_type == 'all') {
+			$support_type_from = 0;
 			$support_type_to = 999;
-        }
-        else {
+		} else {
 			$support_type_from = $support_type;
 			$support_type_to = $support_type;
 		}
 
 		$date_from = $this->session->date_from;
 		$date_to = $this->session->date_to;
-		if ($date_from == null) {$date_from = "'1900-01-01'";} else {$date_from = "'".$date_from."'";}
-		if ($date_to == null) {$date_to = "'2500-01-01'";} else {$date_to = "'".$date_to."'";}
+		if ($date_from == null) {
+			$date_from = "'1900-01-01'";
+		} else {
+			$date_from = "'" . $date_from . "'";
+		}
+		if ($date_to == null) {
+			$date_to = "'2500-01-01'";
+		} else {
+			$date_to = "'" . $date_to . "'";
+		}
 
 
 
-        $sql = "SELECT inquiry.*, inquiry_type.name AS 'inquiry_type_name', company_name,
+		$sql = "SELECT inquiry.*, inquiry_type.name AS 'inquiry_type_name', company_name,
         trn,support_type.name AS 'support_type_name'
 		FROM inquiry
 			 JOIN client ON inquiry.client_id = client.id
@@ -380,7 +389,9 @@ public function getReportWorkPlanCompany($id)
 
 		$query = $this->db->query($sql, array());
 
-		if ($query->num_rows() > 0) {return $query->result();}
+		if ($query->num_rows() > 0) {
+			return $query->result();
+		}
 
 		return NULL;
 	}
@@ -391,52 +402,58 @@ public function getReportWorkPlanCompany($id)
 
 		//--> Criteria Phase
 		$phase = $this->session->phase;
-        if ($phase == 'all') {
-        	$phase_from = 0;
+		if ($phase == 'all') {
+			$phase_from = 0;
 			$phase_to = 999;
-        }
-        else {
+		} else {
 			$phase_from = $phase;
 			$phase_to = $phase;
 		}
 
 		//--> Criteria Status
 		$status = $this->session->status;
-        if ($status == 'all') {
-        	$status_from = 0;
+		if ($status == 'all') {
+			$status_from = 0;
 			$status_to = 999;
-        }
-        else {
+		} else {
 			$status_from = $status;
 			$status_to = $status;
 		}
 
 		//--> Criteria Sector
 		$sector = $this->session->sector;
-        if ($sector == 'all') {
-        	$sector_from = 0;
+		if ($sector == 'all') {
+			$sector_from = 0;
 			$sector_to = 999;
-        }
-        else {
+		} else {
 			$sector_from = $sector;
-			$sector_to = $sector;		}
+			$sector_to = $sector;
+		}
 
 		//--> Criteria Consultant
 		$consultant = $this->session->consultant;
-        if ($consultant == 'all') {
-        	$consultant_from = 0;
+		if ($consultant == 'all') {
+			$consultant_from = 0;
 			$consultant_to = 999;
-        }
-        else {
+		} else {
 			$consultant_from = $consultant;
-			$consultant_to = $consultant;		}
+			$consultant_to = $consultant;
+		}
 
 		//--> Criteria date
 		$date_creation_from = $this->session->date_creation_from;
 		$date_creation_to = $this->session->date_creation_to;
 
-		if ($date_creation_from == null) {$date_creation_from = "'1900-01-01'";} else {$date_creation_from = "'".$date_creation_from."'";}
-		if ($date_creation_to == null) {$date_creation_to = "'2500-01-01'";} else {$date_creation_to = "'".$date_creation_to."'";}
+		if ($date_creation_from == null) {
+			$date_creation_from = "'1900-01-01'";
+		} else {
+			$date_creation_from = "'" . $date_creation_from . "'";
+		}
+		if ($date_creation_to == null) {
+			$date_creation_to = "'2500-01-01'";
+		} else {
+			$date_creation_to = "'" . $date_creation_to . "'";
+		}
 
 
 		$sql = "SELECT consultation.id,consultation_no,company_name,county.name AS 'county_name',
@@ -458,12 +475,11 @@ public function getReportWorkPlanCompany($id)
 
 		$query = $this->db->query($sql, array());
 
-	   	if ($query->num_rows() > 0) {
+		if ($query->num_rows() > 0) {
 			return $query->result();
 		}
 
 		return NULL;
-
 	}
 
 
@@ -477,57 +493,43 @@ public function getReportWorkPlanCompany($id)
 					FROM county ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'parish') {
+		} elseif ($setting == 'parish') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM parish ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'city') {
+		} elseif ($setting == 'city') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM city ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'sector') {
+		} elseif ($setting == 'sector') {
 			$sql = "SELECT id,name,'no code' AS 'code',
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM sector ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'inquiry_type') {
+		} elseif ($setting == 'inquiry_type') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM inquiry_type ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'activity') {
+		} elseif ($setting == 'activity') {
 			$sql = "SELECT id,name,'no code' AS 'code',
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM activity ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'support_type') {
+		} elseif ($setting == 'support_type') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM support_type ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'document_type') {
+		} elseif ($setting == 'document_type') {
 			$sql = "SELECT document_type.id AS 'id',
 						   CONCAT(document_type.name, '  (default class= ', document_class.name, ')') AS 'name',
 			               document_type.code AS 'code',
@@ -537,25 +539,19 @@ public function getReportWorkPlanCompany($id)
 					ORDER BY document_type.name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'document_class') {
+		} elseif ($setting == 'document_class') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM document_class ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'standard') {
+		} elseif ($setting == 'standard') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM standard ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'status') {
+		} elseif ($setting == 'status') {
 			$sql = "SELECT status.id AS 'id',
 						   CONCAT(status.name, '  (Phase= ', phase.name, ')') AS 'name',
 			               status.code AS 'code',
@@ -565,24 +561,19 @@ public function getReportWorkPlanCompany($id)
 					ORDER BY status.name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'phase') {
+		} elseif ($setting == 'phase') {
 			$sql = "SELECT id,name,code,
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM phase ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
-		}
-
-		elseif ($setting == 'category') {
+		} elseif ($setting == 'category') {
 			$sql = "SELECT id,name,'no code' AS 'code',
 					CASE WHEN active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM category ORDER BY name";
 			$query = $this->db->query($sql, array());
 			return $query->result();
 		}
-
 	}
 
 	//--> Get a specific list of the sub-clause
@@ -596,8 +587,8 @@ public function getReportWorkPlanCompany($id)
 						JOIN clause ON sub_clause.clause_id = clause.id
 						JOIN standard ON clause.standard_id = standard.id
 					ORDER BY standard.name,clause.code,sub_clause.code";
-			$query = $this->db->query($sql, array());
-			return $query->result();
+		$query = $this->db->query($sql, array());
+		return $query->result();
 	}
 
 
@@ -612,8 +603,8 @@ public function getReportWorkPlanCompany($id)
 					FROM clause
 					JOIN standard ON clause.standard_id = standard.id
 					ORDER BY standard.name,clause.name";
-			$query = $this->db->query($sql, array());
-			return $query->result();
+		$query = $this->db->query($sql, array());
+		return $query->result();
 	}
 
 	//--> Report to generate the different items for an internal cost plan for a specific technical advice
@@ -628,8 +619,5 @@ public function getReportWorkPlanCompany($id)
 		where ta_id = ?";
 		$query = $this->db->query($sql, array($id));
 		return $query->result();
-
 	}
-
-
 }
