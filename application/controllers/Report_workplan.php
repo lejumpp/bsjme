@@ -30,7 +30,7 @@ class Report_workplan extends Admin_Controller
 		$pdf->SetDisplayMode('real', 'default');
 
 		// Create a session variable to use the title in the header of tcpdf (library tcpdf / Pdf.php)
-		$this->session->set_flashdata('report_code', 'REP0W');
+		$this->session->set_flashdata('report_code', 'REP0WP');
 
 		// set font for the report
 		$pdf->SetFont('dejavusans', '', 8);
@@ -193,7 +193,7 @@ class Report_workplan extends Admin_Controller
 		$pdf->SetDisplayMode('real', 'default');
 
 		// Create a session variable to use the title in the header of tcpdf (library tcpdf / Pdf.php)
-		$this->session->set_flashdata('report_code', 'REP0W');
+		$this->session->set_flashdata('report_code', 'REP0WP');
 
 		// set font for the report
 		$pdf->SetFont('dejavusans', '', 8);
