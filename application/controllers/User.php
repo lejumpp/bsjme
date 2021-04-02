@@ -1,6 +1,6 @@
 <?php
 
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class User extends Admin_Controller
 {
@@ -11,13 +11,12 @@ class User extends Admin_Controller
 		$this->not_logged_in();
 
 		$this->data['page_title'] = 'User';
-
 	}
 
 
 	public function index()
 	{
-		if(!in_array('viewUser', $this->permission)) {
+		if (!in_array('viewUser', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
@@ -30,7 +29,7 @@ class User extends Admin_Controller
 
 	public function fetchUserDataById($id)
 	{
-		if($id) {
+		if ($id) {
 			$data = $this->model_user->getUserData($id);
 			echo json_encode($data);
 		}
@@ -40,7 +39,6 @@ class User extends Admin_Controller
 	{
 		$data = $this->model_profile->getProfileData();
 		echo json_encode($data);
-
 	}
 
 
@@ -61,13 +59,13 @@ class User extends Admin_Controller
 			$buttons = '';
 			$username = $value['username'];
 
-			if(in_array('updateUser', $this->permission)) {
-				$buttons .= '<button type="button" class="btn btn-default" onclick="editFunc('.$value['id'].')" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button>';
-				$username ='  <a data-target="#editModal" onclick="editFunc('.$value['id'].')" data-toggle="modal" href="#editModal">'.$value['username'].'</a>';
+			if (in_array('updateUser', $this->permission)) {
+				$buttons .= '<button type="button" class="btn btn-default" onclick="editFunc(' . $value['id'] . ')" data-toggle="modal" data-target="#editModal"><i class="fa fa-pencil"></i></button>';
+				$username = '  <a data-target="#editModal" onclick="editFunc(' . $value['id'] . ')" data-toggle="modal" href="#editModal">' . $value['username'] . '</a>';
 			}
 
-			if(in_array('deleteUser', $this->permission)) {
-				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc('.$value['id'].')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
+			if (in_array('deleteUser', $this->permission)) {
+				$buttons .= ' <button type="button" class="btn btn-default" onclick="removeFunc(' . $value['id'] . ')" data-toggle="modal" data-target="#removeModal"><i class="fa fa-trash"></i></button>';
 			}
 
 			$active = ($value['active'] == 1) ? '<span class="label label-success">Active</span>' : '<span class="label label-warning">Inactive</span>';
@@ -78,7 +76,7 @@ class User extends Admin_Controller
 				$value['email'],
 				$value['name'],
 				$value['phone'],
-				$profile_data['name'].' ('.$value['profile_id'].')',
+				$profile_data['name'] . ' (' . $value['profile_id'] . ')',
 				$active,
 				$buttons
 			);
@@ -88,13 +86,13 @@ class User extends Admin_Controller
 	}
 
 
-   //--> If the validation is not true (not valid), then it provides the validation error on the json format
-   //    If the validation for each input is valid then it inserts the data into the database and
-   //    returns the appropriate message in the json format.
+	//--> If the validation is not true (not valid), then it provides the validation error on the json format
+	//    If the validation for each input is valid then it inserts the data into the database and
+	//    returns the appropriate message in the json format.
 
 	public function create()
 	{
-		if(!in_array('createUser', $this->permission)) {
+		if (!in_array('createUser', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
@@ -106,39 +104,37 @@ class User extends Admin_Controller
 		$this->form_validation->set_rules('name', 'Name', 'trim|required');
 		$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 
-		$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
+		$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
 
-        if ($this->form_validation->run() == TRUE) {
-        	$password = $this->password_hash($this->input->post('password'));
-        	$data = array(
-        		'username' => $this->input->post('username'),
-        		'password' => $password,
-        		'profile_id' => $this->input->post('profile'),
-        		'email' => $this->input->post('email'),
-        		'name' => $this->input->post('name'),
-        		'phone' => $this->input->post('phone'),
-        		'active' => $this->input->post('active'),
-        		'updated_by' => $this->session->user_id,
-        	);
+		if ($this->form_validation->run() == TRUE) {
+			$password = $this->password_hash($this->input->post('password'));
+			$data = array(
+				'username' => $this->input->post('username'),
+				'password' => $password,
+				'profile_id' => $this->input->post('profile'),
+				'email' => $this->input->post('email'),
+				'name' => $this->input->post('name'),
+				'phone' => $this->input->post('phone'),
+				'active' => $this->input->post('active'),
+				'updated_by' => $this->session->user_id,
+			);
 
-        	$create = $this->model_user->create($data);
-        	if($create == true) {
-        		$response['success'] = true;
-        		$response['messages'] = 'Successfully created';
-        	}
-        	else {
-        		$response['success'] = false;
-        		$response['messages'] = 'Error in the database while creating the information';
-        	}
-        }
-        else {
-        	$response['success'] = false;
-        	foreach ($_POST as $key => $value) {
-        		$response['messages'][$key] = form_error($key);
-        	}
-        }
+			$create = $this->model_user->create($data);
+			if ($create == true) {
+				$response['success'] = true;
+				$response['messages'] = 'Successfully created';
+			} else {
+				$response['success'] = false;
+				$response['messages'] = 'Error in the database while creating the information';
+			}
+		} else {
+			$response['success'] = false;
+			foreach ($_POST as $key => $value) {
+				$response['messages'][$key] = form_error($key);
+			}
+		}
 
-        echo json_encode($response);
+		echo json_encode($response);
 	}
 
 
@@ -151,50 +147,44 @@ class User extends Admin_Controller
 	// Does not exceed 32 characters in length
 	// The functon is then called back in the form_validation
 	// section for password $this->form_validation->set_rules('password', 'Password', 'callback_password_strength');
-	public function password_strength($password='')
+	public function password_strength($password = '')
 	{
 		$regex_lowercase = '/[a-z]/';
 		$regex_uppercase = '/[A-Z]/';
 		$regex_number = '/[0-9]/';
 		$regex_special = '/[!@#$%^&*()\-_=+{};:,<.>~]/';
 
-		if (preg_match_all($regex_lowercase, $password) < 1)
-		{
+		if (preg_match_all($regex_lowercase, $password) < 1) {
 			$this->form_validation->set_message('password_strength', 'The {field} field must be at least one lowercase letter.');
 
 			return FALSE;
 		}
 
-		if (preg_match_all($regex_uppercase, $password) < 1)
-		{
+		if (preg_match_all($regex_uppercase, $password) < 1) {
 			$this->form_validation->set_message('password_strength', 'The {field} field must be at least one uppercase letter.');
 
 			return FALSE;
 		}
 
-		if (preg_match_all($regex_number, $password) < 1)
-		{
+		if (preg_match_all($regex_number, $password) < 1) {
 			$this->form_validation->set_message('password_strength', 'The {field} field must have at least one number.');
 
 			return FALSE;
 		}
 
-		if (preg_match_all($regex_special, $password) < 1)
-		{
+		if (preg_match_all($regex_special, $password) < 1) {
 			$this->form_validation->set_message('password_strength', 'The {field} field must have at least one special character.' . ' ' . htmlentities('!@#$%^&*()\-_=+{};:,<.>~'));
 
 			return FALSE;
 		}
 
-		if (strlen($password) < 8)
-		{
+		if (strlen($password) < 8) {
 			$this->form_validation->set_message('password_strength', 'The {field} field must be at least 8 characters in length.');
 
 			return FALSE;
 		}
 
-		if (strlen($password) > 32)
-		{
+		if (strlen($password) > 32) {
 			$this->form_validation->set_message('password_strength', 'The {field} field cannot exceed 32 characters in length.');
 
 			return FALSE;
@@ -202,30 +192,27 @@ class User extends Admin_Controller
 
 		return TRUE;
 	}
-	
+
 	function phone_number_check($phone)
 	{
 		$phone = trim($phone);
 		if ($phone == '') {
 			return TRUE;
-		}
-		else
-		{
-			if (preg_match('/^\(?([0-9]{1})[-.]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/', $phone))
-			{
+		} else {
+			if (preg_match('/^\(?([0-9]{1})[-.]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/', $phone)) {
 				return preg_replace('/^\(?([0-9]{1})[-.]?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/', '($1) $2-$3', $phone);
-			}
-			else
-			{
+			} else {
 				$this->form_validation->set_message('phone_number_check', 'Enter phone number , eg 1-876-111-1111.');
 				return FALSE;
 			}
 		}
 	}
-	
+
 	public function createUserClient($client_id)
 	{
-		if(!in_array('createUser', $this->permission)) {redirect('dashboard', 'refresh');}
+		if (!in_array('createUser', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
 
 		$response = array();
 
@@ -237,41 +224,39 @@ class User extends Admin_Controller
 
 		$total_user = $this->model_user->getUsername($client_data['trn']);
 
-        if ($total_user == 0) {
+		if ($total_user == 0) {
 
-	        $password_temp = 'bsj'.$client_data['trn'];
-	    	$password = $this->password_hash($password_temp);
+			$password_temp = 'bsj' . $client_data['trn'];
+			$password = $this->password_hash($password_temp);
 
-	    	$data = array(
-	    		'username' => $client_data['trn'],
-	    		'password' => $password,
-	    		'profile_id' => 4,    //for profile client
-	    		'email' => $client_data['email'],
-	    		'name' => $client_data['client_name'],
-	    		'phone' => $client_data['phone'],
-	    		'active' => 1,
-	    		'updated_by' => $this->session->user_id,
-	    	);
+			$data = array(
+				'username' => $client_data['trn'],
+				'password' => $password,
+				'profile_id' => 4,    //for profile client
+				'email' => $client_data['email'],
+				'name' => $client_data['client_name'],
+				'phone' => $client_data['phone'],
+				'active' => 1,
+				'updated_by' => $this->session->user_id,
+			);
 
-	    	$create = $this->model_user->create($data);
+			$create = $this->model_user->create($data);
 
-	    	if($create == true) {
-	    		$msg_error = 'The user have been created.';
-                $this->session->set_flashdata('success', $msg_error);
-	    		redirect('consultation/update/'.$this->session->consultation_id."?tab=consultation", 'refresh');
-	    	}
-	    	else {
-	    		$response['success'] = false;
-	    		$response['messages'] = 'Error in the database while creating the user.';
-	    	}
-	    } else {
-	    	$msg_error = 'A user with this TRN already exists.';
-            $this->session->set_flashdata('warning', $msg_error);
-            redirect('consultation/update/'.$this->session->consultation_id."?tab=consultation", 'refresh');
-    	
-	    }	
-        
-        echo json_encode($response);
+			if ($create == true) {
+				$msg_error = 'The user have been created.';
+				$this->session->set_flashdata('success', $msg_error);
+				redirect('consultation/update/' . $this->session->consultation_id . "?tab=consultation", 'refresh');
+			} else {
+				$response['success'] = false;
+				$response['messages'] = 'Error in the database while creating the user.';
+			}
+		} else {
+			$msg_error = 'A user with this TRN already exists.';
+			$this->session->set_flashdata('warning', $msg_error);
+			redirect('consultation/update/' . $this->session->consultation_id . "?tab=consultation", 'refresh');
+		}
+
+		echo json_encode($response);
 	}
 
 
@@ -279,109 +264,108 @@ class User extends Admin_Controller
 
 	public function password_hash($pass = '')
 	{
-		if($pass) {
+		if ($pass) {
 			$password = password_hash($pass, PASSWORD_DEFAULT);
 			return $password;
 		}
 	}
 
 
-   //--> If the validation is not true (not valid), then it provides the validation error on the json format
-   //    If the validation for each input is valid then it updates the data into the database and
-   //    returns an appropriate message in the json format.
+	//--> If the validation is not true (not valid), then it provides the validation error on the json format
+	//    If the validation for each input is valid then it updates the data into the database and
+	//    returns an appropriate message in the json format.
 
 	public function update($id)
 	{
-		if(!in_array('updateUser', $this->permission)) {
+		if (!in_array('updateUser', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
 		$response = array();
 
-		if($id) {
+		if ($id) {
 
 			// We have an update without changing the password
-	        if(empty($this->input->post('edit_password')))
-        		{
-					$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
-					$this->form_validation->set_rules('edit_email', 'Email', 'valid_email|trim|required');
-					$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
-					$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
+			if (empty($this->input->post('edit_password'))) {
+				$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
+				$this->form_validation->set_rules('edit_email', 'Email', 'valid_email|trim|required');
+				$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
+				$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 
-        		if ($this->form_validation->run() == TRUE) {
-		        	$data = array(
-		        		'username' => $this->input->post('edit_username'),
-		        		'profile_id' => $this->input->post('edit_profile'),
-		        		'email' => $this->input->post('edit_email'),
-		        		'name' => $this->input->post('edit_name'),
-		        		'phone' => $this->input->post('edit_phone'),
-		        		'active' => $this->input->post('edit_active'),
-		        		'updated_by' => $this->session->user_id,
-		        	);
+				if ($this->form_validation->run() == TRUE) {
+					$data = array(
+						'username' => $this->input->post('edit_username'),
+						'profile_id' => $this->input->post('edit_profile'),
+						'email' => $this->input->post('edit_email'),
+						'name' => $this->input->post('edit_name'),
+						'phone' => $this->input->post('edit_phone'),
+						'active' => $this->input->post('edit_active'),
+						'updated_by' => $this->session->user_id,
+					);
 
-			        $update = $this->model_user->update($data, $id);
+					$update = $this->model_user->update($data, $id);
 
-		        	if($update == true) {
-		        		$response['success'] = true;
-		        		$response['messages'] = 'Successfully updated';
-		        		}
-		        	else {
-		        		$response['success'] = false;
-		        		$response['messages'] = 'Error in the database while updating the information';
-		        		}
-	        		}  //validation is true
-		        else   //validation is false
-		        	{
-		        	$response['success'] = false;
-		        	foreach ($_POST as $key => $value) {
-		        		$response['messages'][$key] = form_error($key);}
-		        	}
-		        }  //end if we have an update without password
-
-            else  //we have an update with the password included
-            	{
-		        	$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
-					$this->form_validation->set_rules('edit_email', 'Email', 'valid_email|trim|required');
-					$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
-		        	$this->form_validation->set_rules('edit_password', 'Password', 'trim|required|callback_password_strength');
-					$this->form_validation->set_rules('edit_cpassword', 'Confirm Password', 'trim|required|matches[edit_password]');
-					$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
-					$this->form_validation->set_error_delimiters('<p class="text-danger">','</p>');
-
-					if($this->form_validation->run() == TRUE) {
-
-						$password = $this->password_hash($this->input->post('edit_password'));
-
-						$data = array(
-			        		'username' => $this->input->post('edit_username'),
-			        		'profile_id' => $this->input->post('edit_profile'),
-			        		'email' => $this->input->post('edit_email'),
-			        		'name' => $this->input->post('edit_name'),
-			        		'phone' => $this->input->post('edit_phone'),
-			        		'active' => $this->input->post('edit_active'),
-			        		'password' => $password,
-			        		'updated_by' => $this->session->user_id,
-			        	);
-
-			        	$update = $this->model_user->update($data, $id);
-
-			        	if($update == true) {
-			        		$response['success'] = true;
-			        		$response['messages'] = 'Successfully updated';
-			        		}
-			        	else {
-			        		$response['success'] = false;
-			        		$response['messages'] = 'Error in the database while updating the information';
-			        		}
-					} // form validation is true for update with password
-				else  //Validation is false and we send messages of errors
-					{
-					$response['success'] = false;
-		        	foreach ($_POST as $key => $value) {
-		        		$response['messages'][$key] = form_error($key);}
+					if ($update == true) {
+						$response['success'] = true;
+						$response['messages'] = 'Successfully updated';
+					} else {
+						$response['success'] = false;
+						$response['messages'] = 'Error in the database while updating the information';
 					}
-				} // if password to update
-			} // if we have an ID
+				}  //validation is true
+				else   //validation is false
+				{
+					$response['success'] = false;
+					foreach ($_POST as $key => $value) {
+						$response['messages'][$key] = form_error($key);
+					}
+				}
+			}  //end if we have an update without password
+
+			else  //we have an update with the password included
+			{
+				$this->form_validation->set_rules('edit_username', 'Username', 'trim|required|min_length[5]|max_length[12]');
+				$this->form_validation->set_rules('edit_email', 'Email', 'valid_email|trim|required');
+				$this->form_validation->set_rules('edit_name', 'Name', 'trim|required');
+				$this->form_validation->set_rules('edit_password', 'Password', 'trim|required|callback_password_strength');
+				$this->form_validation->set_rules('edit_cpassword', 'Confirm Password', 'trim|required|matches[edit_password]');
+				$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
+				$this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
+
+				if ($this->form_validation->run() == TRUE) {
+
+					$password = $this->password_hash($this->input->post('edit_password'));
+
+					$data = array(
+						'username' => $this->input->post('edit_username'),
+						'profile_id' => $this->input->post('edit_profile'),
+						'email' => $this->input->post('edit_email'),
+						'name' => $this->input->post('edit_name'),
+						'phone' => $this->input->post('edit_phone'),
+						'active' => $this->input->post('edit_active'),
+						'password' => $password,
+						'updated_by' => $this->session->user_id,
+					);
+
+					$update = $this->model_user->update($data, $id);
+
+					if ($update == true) {
+						$response['success'] = true;
+						$response['messages'] = 'Successfully updated';
+					} else {
+						$response['success'] = false;
+						$response['messages'] = 'Error in the database while updating the information';
+					}
+				} // form validation is true for update with password
+				else  //Validation is false and we send messages of errors
+				{
+					$response['success'] = false;
+					foreach ($_POST as $key => $value) {
+						$response['messages'][$key] = form_error($key);
+					}
+				}
+			} // if password to update
+		} // if we have an ID
 
 		echo json_encode($response);
 	}
@@ -390,7 +374,7 @@ class User extends Admin_Controller
 
 	public function remove()
 	{
-		if(!in_array('deleteUser', $this->permission)) {
+		if (!in_array('deleteUser', $this->permission)) {
 			redirect('dashboard', 'refresh');
 		}
 
@@ -399,17 +383,16 @@ class User extends Admin_Controller
 		$response = '';
 		$response = array();
 
-		if($user_id) {
+		if ($user_id) {
 			$delete = $this->model_user->remove($user_id);
-			if($delete == true) {
+			if ($delete == true) {
 				$response['success'] = true;
-				$response['messages'] = 'Successfully deleted';}
-			else {
+				$response['messages'] = 'Successfully deleted';
+			} else {
 				$response['success'] = false;
 				$response['messages'] = 'Error in the database while deleting the information';
 			}
-		}
-		else {
+		} else {
 			$response['success'] = false;
 			$response['messages'] = 'Refresh the page again';
 		}
@@ -419,88 +402,81 @@ class User extends Admin_Controller
 
 
 
-//--------------------------------------------- My User --------------------------------------->
+	//--------------------------------------------- My User --------------------------------------->
 
-    public function my_user()
-    {
-        if(!in_array('viewMyUser', $this->permission)) {redirect('dashboard', 'refresh');}
+	public function my_user()
+	{
+		if (!in_array('viewMyUser', $this->permission)) {
+			redirect('dashboard', 'refresh');
+		}
 
-        $id = $this->session->userdata('user_id');
+		$id = $this->session->userdata('user_id');
 
-        if($id) {
+		if ($id) {
 			$this->form_validation->set_rules('email', 'Email', 'valid_email|trim|required');
-            $this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
+			$this->form_validation->set_rules('phone', 'Phone', 'callback_phone_number_check|trim');
 
 
-            if ($this->form_validation->run() == TRUE) {
-                // true case
-                if(empty($this->input->post('password'))) {
-                    $data = array(
-                        'email' => $this->input->post('email'),
-                        'name' => $this->input->post('name'),
-                        'phone' => $this->input->post('phone'),
-                    );
+			if ($this->form_validation->run() == TRUE) {
+				// true case
+				if (empty($this->input->post('password'))) {
+					$data = array(
+						'email' => $this->input->post('email'),
+						'name' => $this->input->post('name'),
+						'phone' => $this->input->post('phone'),
+					);
 
-                    $update = $this->model_user->update($data, $id);
-                    if($update == true) {
-                        $msg_error = 'Successfully updated';
-                        $this->session->set_flashdata('success', $msg_error);
-                        redirect('user/my_user/', 'refresh');
-                    }
-                    else {
-                        $msg_error = 'Error occurred';
-                        $this->session->set_flashdata('error', $msg_error);
-                        redirect('user/my_user/', 'refresh');
-                    }
-                }
-                else {
-                    $this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
-                    $this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required|matches[password]');
+					$update = $this->model_user->update($data, $id);
+					if ($update == true) {
+						$msg_error = 'Successfully updated';
+						$this->session->set_flashdata('success', $msg_error);
+						redirect('user/my_user/', 'refresh');
+					} else {
+						$msg_error = 'Error occurred';
+						$this->session->set_flashdata('error', $msg_error);
+						redirect('user/my_user/', 'refresh');
+					}
+				} else {
+					$this->form_validation->set_rules('password', 'Password', 'trim|required|min_length[6]');
+					$this->form_validation->set_rules('cpassword', 'Confirm Password', 'trim|required|matches[password]');
 
-                    if($this->form_validation->run() == TRUE) {
+					if ($this->form_validation->run() == TRUE) {
 
-                        $password = $this->model_user->password_hash($this->input->post('password'));
+						$password = $this->password_hash($this->input->post('password'));
 
-                        $data = array(
-                            'password' => $password,
-                            'email' => $this->input->post('email'),
-                            'name' => $this->input->post('name'),
-                            'phone' => $this->input->post('phone'),
-                            'updated_by' => $this->session->user_id,
-                        );
+						$data = array(
+							'password' => $password,
+							'email' => $this->input->post('email'),
+							'name' => $this->input->post('name'),
+							'phone' => $this->input->post('phone'),
+							'updated_by' => $this->session->user_id,
+						);
 
-                        $update = $this->model_user->update($data, $id);
-                        if($update == true) {
-                            $msg_error = 'Successfully updated';
-                            $this->session->set_flashdata('success', $msg_error);
-                            redirect('user/my_user/', 'refresh');
-                        }
-                        else {
-                            $msg_error = 'Error occurred';
-                            $this->session->set_flashdata('error', $msg_error);
-                            redirect('user/my_user/', 'refresh');
-                        }
-                    }
-                    else {
-                        // false case
-                        $user_data = $this->model_user->getUserData($id);
-                        $this->data['user_data'] = $user_data;
+						$update = $this->model_user->update($data, $id);
+						if ($update == true) {
+							$msg_error = 'Successfully updated';
+							$this->session->set_flashdata('success', $msg_error);
+							redirect('user/my_user/', 'refresh');
+						} else {
+							$msg_error = 'Error occurred';
+							$this->session->set_flashdata('error', $msg_error);
+							redirect('user/my_user/', 'refresh');
+						}
+					} else {
+						// false case
+						$user_data = $this->model_user->getUserData($id);
+						$this->data['user_data'] = $user_data;
 
-                        $this->render_template('user/my_user', $this->data);
-                    }
+						$this->render_template('user/my_user', $this->data);
+					}
+				}
+			} else {
+				// false case
+				$user_data = $this->model_user->getUserData($id);
+				$this->data['user_data'] = $user_data;
 
-                }
-            }
-            else {
-                // false case
-                $user_data = $this->model_user->getUserData($id);
-                $this->data['user_data'] = $user_data;
-
-                $this->render_template('user/my_user', $this->data);
-            }
-        }
-    }   
-
-	
-
+				$this->render_template('user/my_user', $this->data);
+			}
+		}
+	}
 }
