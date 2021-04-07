@@ -412,9 +412,9 @@
       'order': [
         [0, 'desc']
       ],
-      // "scrollY": "200px",
-      // "scrollCollaps": true,
-      // "paging": false
+      "scrollY": "200px",
+      "scrollCollapse": true,
+      "paging": false
     });
 
     // initialize the datatable for Tasks
