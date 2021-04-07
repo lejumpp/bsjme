@@ -218,6 +218,9 @@ class Workplan extends Admin_Controller
         $result = array('data' => array());
         $data = $this->model_workplan->getWorkPlanTaskData($id);
         foreach ($data as $key => $value) {
+
+            $category_data = $this->model_category->getCategoryData($value['category_id']);
+
             $buttons = '';
 
             if (in_array('updateWorkPlan', $this->permission)) {
@@ -228,13 +231,10 @@ class Workplan extends Admin_Controller
             }
             $result['data'][$key] = array(
                 $value['task'],
-                $value['entity'],
-                $value['responsible_officer'],
-                $value['email'],
-                $value['phone'],
+                $category_data['name'],
                 $value['s_date'],
                 $value['e_date'],
-                $value['status_id'],
+                $value['status'],
                 $buttons
             );
         } // /foreach
@@ -247,6 +247,8 @@ class Workplan extends Admin_Controller
             redirect('dashboard', 'refresh');
         }
         $this->form_validation->set_rules('task', 'Task', 'trim|required');
+        $this->form_validation->set_rules('category', 'Category', 'trim|required');
+        $this->form_validation->set_rules('status', 'Status', 'trim|required');
         $this->form_validation->set_error_delimiters('<p class="alert alert-warning">', '</p>');
 
         $response = array();
@@ -255,13 +257,14 @@ class Workplan extends Admin_Controller
             $data = array(
                 'wid' => $this->session->workplan_id,
                 'task' => $this->input->post('task'),
+                'category_id' => $this->input->post('category'),
                 'entity' => $this->input->post('entity'),
                 'responsible_officer' => $this->input->post('responsible_officer'),
                 'email' => $this->input->post('email'),
                 'phone' => $this->input->post('phone'),
                 's_date' => $this->input->post('s_date'),
                 'e_date' => $this->input->post('e_date'),
-                'status_id' => $this->input->post('status')
+                'status' => $this->input->post('status')
             );
 
             $create = $this->model_workplan->createTask($data);
@@ -304,13 +307,14 @@ class Workplan extends Admin_Controller
                 $data = array(
                     'wid' => $this->session->workplan_id,
                     'task' => $this->input->post('edit_task'),
+                    'category_id' => $this->input->post('category'),
                     'entity' => $this->input->post('edit_entity'),
                     'responsible_officer' => $this->input->post('edit_responsible_officer'),
                     'email' => $this->input->post('edit_email'),
                     'phone' => $this->input->post('edit_phone'),
                     's_date' => $this->input->post('edit_s_date'),
                     'e_date' => $this->input->post('edit_e_date'),
-                    'status_id' => $this->input->post('edit_status')
+                    'status' => $this->input->post('edit_status')
                 );
 
                 $update = $this->model_workplan->updateTask($data, $id);

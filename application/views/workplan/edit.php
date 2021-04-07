@@ -115,16 +115,13 @@
                       <table id="manageTableTask" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                           <tr>
-                            <th>Task</th>
-                            <th>Entity</th>
-                            <th>Responsible Officer</th>
-                            <th>Email</th>
-                            <th>Phone</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Status</th>
+                            <th width="35%">Task</th>
+                            <th width="15%">Category</th>
+                            <th width="12.5%">Start Date</th>
+                            <th width="12.5%">End Date</th>
+                            <th width="15%">Status</th>
                             <?php if (in_array('updateWorkPlan', $user_permission) || in_array('deleteWorkPlan', $user_permission)) : ?>
-                              <th>Action</th>
+                              <th width="10%">Action</th>
                             <?php endif; ?>
                           </tr>
                         </thead>
@@ -149,6 +146,12 @@
                               <div class="form-group">
                                 <label for="task">Task<font color="red"> *</font></label>
                                 <textarea class="form-control" id="task" name="task" autocomplete="off"></textarea>
+                              </div>
+
+                              <div class="form-group">
+                                <label for="category">Category<font color="red"> *</font></label>
+                                <select name="category" id="category" class="form-control select2" style="width: 100%;">
+                                </select>
                               </div>
 
                               <div class="form-group">
@@ -192,7 +195,7 @@
                               </div>
 
                               <div class="form-group">
-                                <label for="status">Status</label>
+                                <label for="status">Status<font color="red"> *</font></label>
                                 <input type="text" class="form-control" id="status" name="status" autocomplete="off">
                               </div>
 
@@ -216,7 +219,7 @@
                         <div class="modal-content">
                           <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">Edit Inquiry</h4>
+                            <h4 class="modal-title">Edit Task</h4>
                           </div>
 
                           <form role="form" action="<?php echo base_url('workplan/updateWorkPlanTask') ?>" method="post" id="editFormTask">
@@ -225,6 +228,12 @@
                               <div class="form-group">
                                 <label for="task">Task<font color="red"> *</font></label>
                                 <textarea class="form-control" id="edit_task" name="edit_task" autocomplete="off"></textarea>
+                              </div>
+
+                              <div class="form-group">
+                                <label>Category<font color="red"> *</font></label>
+                                <select name="edit_category" id="category" class="form-control select2" style="width: 100%;">
+                                </select>
                               </div>
 
                               <div class="form-group">
@@ -268,7 +277,7 @@
                               </div>
 
                               <div class="form-group">
-                                <label for="status">Status</label>
+                                <label for="status">Status<font color="red"> *</font></label>
                                 <input type="text" class="form-control" id="edit_status" name="edit_status" autocomplete="off">
                               </div>
                             </div>
@@ -378,15 +387,34 @@
 
   $(document).ready(function() {
 
+    //---> creation of the drop-down list inquiry type
+    $category = $('[id="category"]');
+    $.ajax({
+      url: base_url + 'category/fetchActiveCategoryData',
+      dataType: "JSON",
+      success: function(data) {
+        $category.html('<option value=""></option>');
+        //iterate over the data and append a select option
+        $.each(data, function(key, val) {
+          $category.append('<option value="' + val.id + '">' + val.name + '</option>');
+        });
+
+      },
+      error: function() {
+        //if there is an error append a 'none available' option
+        $category.html('<option id="-1">none available</option>');
+      }
+    });
+
     // initialize the datatable for Tasks
     manageTableTask = $('#manageTableTask').DataTable({
       'ajax': base_url + 'workplan/fetchWorkPlanTaskData/' + <?php echo $wkplan_data['workplan']['id']; ?>,
       'order': [
         [0, 'desc']
       ],
-      "scroolY": "200px",
-      "scrollCollaps": true,
-      "paging": false
+      // "scrollY": "200px",
+      // "scrollCollaps": true,
+      // "paging": false
     });
 
     // initialize the datatable for Tasks
@@ -514,13 +542,14 @@
       dataType: 'json',
       success: function(response) {
         $("#edit_task").val(response.task);
+        $('[name="edit_category"]').val(response.category_id);
         $("#edit_entity").val(response.entity);
         $("#edit_responsible_officer").val(response.responsible_officer);
         $("#edit_email").val(response.email);
         $("#edit_phone").val(response.phone);
         $("#edit_s_date").val(response.s_date);
         $("#edit_e_date").val(response.e_date);
-        $("#edit_status").val(response.status_id);
+        $("#edit_status").val(response.status);
 
 
         // submit the update form
