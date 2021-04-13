@@ -179,6 +179,7 @@ class Report_workplan extends Admin_Controller
 		$pdf->Output('Report_workplan.pdf', 'I');
 	}
 
+	//print the entire workplan with all the associated deliverables and tasks
 	public function report_workplan($id)
 	{
 		// Orientation (Landscape or Portrait, format, character, keepmargin, )
@@ -254,7 +255,7 @@ class Report_workplan extends Admin_Controller
 				$cell2 = array('data' => $rst->task, 'width' => '35%');
 				$cell3 = array('data' => $rst->s_date, 'width' => '20%');
 				$cell4 = array('data' => $rst->e_date, 'width' => '20%');
-				$cell5 = array('data' => $rst->status_id, 'width' => '20%');
+				$cell5 = array('data' => $rst->status, 'width' => '20%');
 				$this->table->add_row($cell1, $cell2, $cell3, $cell4, $cell5);
 			endforeach;
 

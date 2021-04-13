@@ -554,7 +554,6 @@ class Model_report extends CI_Model
 		} elseif ($setting == 'status') {
 			$sql = "SELECT status.id AS 'id',
 						   CONCAT(status.name, '  (Phase= ', phase.name, ')') AS 'name',
-			               status.code AS 'code',
 					CASE WHEN status.active = 1 THEN 'Yes' else 'No' END AS 'active'
 					FROM status 
 					LEFT JOIN phase ON phase.id = status.phase_id
