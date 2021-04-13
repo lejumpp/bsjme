@@ -155,12 +155,12 @@
                               </div>
 
                               <div class="form-group">
-                                <label for="entity">Entity</label>
+                                <label for="entity">Supporting Organization</label>
                                 <input type="text" class="form-control" id="entity" name="entity" autocomplete="off">
                               </div>
 
                               <div class="form-group">
-                                <label for="responsible_officer">Responsible Officer</label>
+                                <label for="responsible_officer">Contact Personnel</label>
                                 <input type="text" class="form-control" id="responsible_officer" name="responsible_officer" autocomplete="off">
                               </div>
 
@@ -196,7 +196,8 @@
 
                               <div class="form-group">
                                 <label for="status">Status<font color="red"> *</font></label>
-                                <input type="text" class="form-control" id="status" name="status" autocomplete="off">
+                                <select name="status" id="status" class="form-control select2" style="width: 100%;">
+                                </select>
                               </div>
 
                             </div>
@@ -237,12 +238,12 @@
                               </div>
 
                               <div class="form-group">
-                                <label for="entity">Entity</label>
+                                <label for="entity">Supporting Organization</label>
                                 <input type="text" class="form-control" id="edit_entity" name="edit_entity" autocomplete="off">
                               </div>
 
                               <div class="form-group">
-                                <label for="responsible_officer">Responsible Officer</label>
+                                <label for="responsible_officer">Contact Personnel</label>
                                 <input type="text" class="form-control" id="edit_responsible_officer" name="edit_responsible_officer" autocomplete="off">
                               </div>
 
@@ -278,7 +279,8 @@
 
                               <div class="form-group">
                                 <label for="status">Status<font color="red"> *</font></label>
-                                <input type="text" class="form-control" id="edit_status" name="edit_status" autocomplete="off">
+                                <select name="edit_status" id="edit_status" class="form-control select2" style="width: 100%;">
+                                </select>
                               </div>
                             </div>
                             <div class="modal-footer">
@@ -326,12 +328,9 @@
                       <table style="width:100%" id="manageTableNotes" class="table table-bordered table-striped" style="width:100%">
                         <thead>
                           <tr>
-                            <th style="width:60%">Notes</th>
+                            <th style="width:60%">Notes/ Log</th>
                             <th style="width:20%">Date Updated</th>
                             <th style="width:20%">Updated By</th>
-                            <!-- <?php if (in_array('updateWorkPlan', $user_permission) || in_array('deleteWorkPlan', $user_permission)) : ?>
-                              <th>Action</th>
-                            <?php endif; ?> -->
                           </tr>
                         </thead>
                       </table>
