@@ -222,4 +222,14 @@ class Status extends Admin_Controller
 
 		echo json_encode($response);
 	}
+
+	//--> This is to fetch all the status related to workplan
+	public function fetchWorkPlanStatus($id)
+	{
+		if ($id) {
+			$data = $this->model_status->getWorkPlanStatus($id);
+			echo json_encode($data);
+		}
+		return false;
+	}
 }

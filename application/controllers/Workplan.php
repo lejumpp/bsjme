@@ -220,6 +220,7 @@ class Workplan extends Admin_Controller
         foreach ($data as $key => $value) {
 
             $category_data = $this->model_category->getCategoryData($value['category_id']);
+            $status_data = $this->model_status->getWorkPlanStatusById($value['status']);
 
             $buttons = '';
 
@@ -234,7 +235,7 @@ class Workplan extends Admin_Controller
                 $category_data['name'],
                 $value['s_date'],
                 $value['e_date'],
-                $value['status'],
+                $status_data['name'],
                 $buttons
             );
         } // /foreach
@@ -302,12 +303,14 @@ class Workplan extends Admin_Controller
         $response = array();
         if ($id) {
             $this->form_validation->set_rules('edit_task', 'Task', 'trim|required');
+            $this->form_validation->set_rules('edit_category', 'Task', 'trim|required');
+            $this->form_validation->set_rules('edit_status', 'Task', 'trim|required');
             $this->form_validation->set_error_delimiters('<p class="text-danger">', '</p>');
             if ($this->form_validation->run() == TRUE) {
                 $data = array(
                     'wid' => $this->session->workplan_id,
                     'task' => $this->input->post('edit_task'),
-                    'category_id' => $this->input->post('category'),
+                    'category_id' => $this->input->post('edit_category'),
                     'entity' => $this->input->post('edit_entity'),
                     'responsible_officer' => $this->input->post('edit_responsible_officer'),
                     'email' => $this->input->post('edit_email'),

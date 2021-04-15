@@ -47,6 +47,20 @@ class Model_status extends CI_Model
 		return $query->result_array();
 	}
 
+	public function getWorkPlanStatus($id)
+	{
+		$sql = "SELECT * FROM status WHERE status.phase_id=?";
+		$query = $this->db->query($sql, array(8));
+		return $query->result_array();
+	}
+
+	public function getWorkPlanStatusById($id)
+	{
+		$sql = "SELECT * FROM status WHERE id = ?";
+		$query = $this->db->query($sql, array($id));
+		return $query->row_array();
+	}
+
 	public function create($data)
 	{
 		if ($data) {

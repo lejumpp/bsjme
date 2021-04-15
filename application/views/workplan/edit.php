@@ -279,7 +279,7 @@
 
                               <div class="form-group">
                                 <label for="status">Status<font color="red"> *</font></label>
-                                <select name="edit_status" id="edit_status" class="form-control select2" style="width: 100%;">
+                                <select name="edit_status" id="status" class="form-control select2" style="width: 100%;">
                                 </select>
                               </div>
                             </div>
@@ -386,7 +386,7 @@
 
   $(document).ready(function() {
 
-    //---> creation of the drop-down list inquiry type
+    //---> creation of the drop-down list category
     $category = $('[id="category"]');
     $.ajax({
       url: base_url + 'category/fetchActiveCategoryData',
@@ -396,6 +396,25 @@
         //iterate over the data and append a select option
         $.each(data, function(key, val) {
           $category.append('<option value="' + val.id + '">' + val.name + '</option>');
+        });
+
+      },
+      error: function() {
+        //if there is an error append a 'none available' option
+        $category.html('<option id="-1">none available</option>');
+      }
+    });
+
+    //---> creation of the drop-down list status
+    $status = $('[id="status"]');
+    $.ajax({
+      url: base_url + 'status/fetchWorkPlanStatus/8',
+      dataType: "JSON",
+      success: function(data) {
+        $status.html('<option value=""></option>');
+        //iterate over the data and append a select option
+        $.each(data, function(key, val) {
+          $status.append('<option value="' + val.id + '">' + val.name + '</option>');
         });
 
       },
@@ -548,7 +567,7 @@
         $("#edit_phone").val(response.phone);
         $("#edit_s_date").val(response.s_date);
         $("#edit_e_date").val(response.e_date);
-        $("#edit_status").val(response.status);
+        $('[name="edit_status"]').val(response.status);
 
 
         // submit the update form
