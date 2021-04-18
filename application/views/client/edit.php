@@ -568,7 +568,7 @@
                           <th>Consultant</th>
                           <th>Activity</th>
                           <th>Date creation</th>
-                          <?php if (in_array('updateTechnicalAdvice', $user_permission) || in_array('deleteTechnicalAdvice', $user_permission)) : ?>
+                          <?php if (in_array('updateTechnicalAdvice', $user_permission) || in_array('deleteTechnicalAdvice', $user_permission) || in_array('viewTechnicalAdvice', $user_permission)) : ?>
                             <th>Action</th>
                           <?php endif; ?>
                         </tr>
@@ -618,7 +618,7 @@
           <!-- Javascript part of Technical Advice     --->
           <!------------------------------------->
 
-          <!-- <script type="text/javascript">
+          <script type="text/javascript">
             var manageTableTechnicalAdvice;
             var base_url = "<?php echo base_url(); ?>";
 
@@ -629,7 +629,7 @@
 
               // initialize the datatable
               manageTableTechnicalAdvice = $('#manageTableTechnicalAdvice').DataTable({
-                'ajax': base_url + 'technical_advice/fetchTechnicalAdviceData/' + <?php echo $client_data['id']; ?>,
+                'ajax': base_url + 'technical_advice/fetchTechnicalAdvicelient/' + <?php echo $client_data['id']; ?>,
                 'order': [
                   [0, 'asc']
                 ]
@@ -638,45 +638,45 @@
             });
 
 
-            function removeTechnicalAdvice(id) {
-              if (id) {
-                $("#removeFormTechnicalAdvice").on('submit', function() {
+            // function removeTechnicalAdvice(id) {
+            //   if (id) {
+            //     $("#removeFormTechnicalAdvice").on('submit', function() {
 
-                  var form = $(this);
+            //       var form = $(this);
 
-                  // remove the text-danger
-                  $(".text-danger").remove();
+            //       // remove the text-danger
+            //       $(".text-danger").remove();
 
-                  $.ajax({
-                    url: form.attr('action'),
-                    type: form.attr('method'),
-                    data: {
-                      ta_id: id
-                    },
-                    dataType: 'json',
-                    success: function(response) {
+            //       $.ajax({
+            //         url: form.attr('action'),
+            //         type: form.attr('method'),
+            //         data: {
+            //           ta_id: id
+            //         },
+            //         dataType: 'json',
+            //         success: function(response) {
 
-                      manageTableTechnicalAdvice.ajax.reload(null, false);
+            //           manageTableTechnicalAdvice.ajax.reload(null, false);
 
-                      if (response.success === true) {
-                        // hide the modal
-                        $("#removeTechnicalAdviceModal").modal('hide');
+            //           if (response.success === true) {
+            //             // hide the modal
+            //             $("#removeTechnicalAdviceModal").modal('hide');
 
-                      } else {
+            //           } else {
 
-                        $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
-                          '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-                          '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
-                          '</div>');
-                      }
-                    }
-                  });
+            //             $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+            //               '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+            //               '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+            //               '</div>');
+            //           }
+            //         }
+            //       });
 
-                  return false;
-                });
-              }
-            }
-          </script> -->
+            //       return false;
+            //     });
+            //   }
+            // }
+          </script>
 
 
 

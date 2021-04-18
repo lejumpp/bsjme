@@ -251,11 +251,12 @@ class Report_workplan extends Admin_Controller
 			$count = 0;
 			// var_dump($REP0WT);
 			foreach ($REP0WT as $rst) : //Task for each deliverable
+				$status_data = $this->model_status->getStatusData($rst->status);
 				$cell1 = array('data' => ++$count . '.', 'width' => '5%');
 				$cell2 = array('data' => $rst->task, 'width' => '35%');
 				$cell3 = array('data' => $rst->s_date, 'width' => '20%');
 				$cell4 = array('data' => $rst->e_date, 'width' => '20%');
-				$cell5 = array('data' => $rst->status, 'width' => '20%');
+				$cell5 = array('data' => $status_data['status_name'], 'width' => '20%');
 				$this->table->add_row($cell1, $cell2, $cell3, $cell4, $cell5);
 			endforeach;
 

@@ -220,7 +220,7 @@ class Workplan extends Admin_Controller
         foreach ($data as $key => $value) {
 
             $category_data = $this->model_category->getCategoryData($value['category_id']);
-            $status_data = $this->model_status->getWorkPlanStatusById($value['status']);
+            $status_data = $this->model_status->getStatusData($value['status']);
 
             $buttons = '';
 
@@ -235,7 +235,7 @@ class Workplan extends Admin_Controller
                 $category_data['name'],
                 $value['s_date'],
                 $value['e_date'],
-                $status_data['name'],
+                $status_data['status_name'],
                 $buttons
             );
         } // /foreach
@@ -300,8 +300,14 @@ class Workplan extends Admin_Controller
         if (!in_array('updateWorkPlan', $this->permission)) {
             redirect('dashboard', 'refresh');
         }
+
+        if (!$id) {
+            redirect('dashboard', 'refresh');
+        }
+
         $response = array();
         if ($id) {
+
             $this->form_validation->set_rules('edit_task', 'Task', 'trim|required');
             $this->form_validation->set_rules('edit_category', 'Task', 'trim|required');
             $this->form_validation->set_rules('edit_status', 'Task', 'trim|required');
