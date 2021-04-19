@@ -10,7 +10,7 @@ class Model_consultation extends CI_Model
 	//--> Get the data
 	public function getConsultationData($id = null)
 	{
-		if($id) {
+		if ($id) {
 			$sql = "SELECT consultation.*,address,client_name,company_name,director_name,trn,
 			    district,email,mobile,phone,postal_code,website,directory,
 				parish.name AS 'parish_name',phase.name AS 'phase_name',
@@ -53,16 +53,16 @@ class Model_consultation extends CI_Model
 	public function getConsultationByConsultant($consultant)
 	{
 
-        if ($consultant == 'all') {
-        	$sql = "SELECT consultation.*,consultation.id AS 'id',company_name,
+		if ($consultant == 'all') {
+			$sql = "SELECT consultation.*,consultation.id AS 'id',company_name,
 							user.name AS 'consultant_name',sector.name AS 'sector_name'
 			FROM consultation
 			        LEFT JOIN client ON consultation.client_id = client.id
 					LEFT JOIN user ON consultation.consultant_id = user.id
 					LEFT JOIN sector ON consultation.sector_id = sector.id
 			ORDER by company_name";
-        } else {
-        	$sql = "SELECT consultation.*,consultation.id AS 'id',company_name,
+		} else {
+			$sql = "SELECT consultation.*,consultation.id AS 'id',company_name,
 							user.name AS 'consultant_name',sector.name AS 'sector_name'
 			FROM consultation
 			        LEFT JOIN client ON consultation.client_id = client.id
@@ -70,8 +70,8 @@ class Model_consultation extends CI_Model
 					LEFT JOIN sector ON consultation.sector_id = sector.id
 		    WHERE consultation.consultant_id LIKE '%$consultant%'
 			ORDER by company_name";
-        }
-		
+		}
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -91,7 +91,7 @@ class Model_consultation extends CI_Model
 				LEFT JOIN sector ON consultation.sector_id = sector.id
 		WHERE client.trn = $trn		
 		ORDER by company_name";
-		
+
 		$query = $this->db->query($sql);
 		return $query->result_array();
 	}
@@ -108,7 +108,7 @@ class Model_consultation extends CI_Model
 	{
 		//---> The id is returned to the controller so that the update form
 		//     of consultation can be opened to continue encoding the datas
-		if($data) {
+		if ($data) {
 			$insert = $this->db->insert('consultation', $data);
 			$insert_id = $this->db->insert_id();
 			return ($insert == true) ? $insert_id : false;
@@ -117,7 +117,7 @@ class Model_consultation extends CI_Model
 
 	public function update($data, $id)
 	{
-		if($data && $id) {
+		if ($data && $id) {
 			$this->db->where('id', $id);
 			$update = $this->db->update('consultation', $data);
 			return ($update == true) ? true : false;
@@ -128,20 +128,19 @@ class Model_consultation extends CI_Model
 	{
 		//--> All the information attached to the client must be deleted
 
-		if($id) {
+		if ($id) {
 
 			// Remove the tables attached to consultation
 			// THe document should be removed manually by the user before deleting the consultation
 
-		    // Remove the answer related to the consultation before deleting the consultation
-		    $this->db->where('consultation_id', $id);
-			$delete = $this->db->delete('answer');	
-			
+			// Remove the answer related to the consultation before deleting the consultation
+			$this->db->where('consultation_id', $id);
+			$delete = $this->db->delete('answer');
+
 			// delete the consultation
 			$this->db->where('id', $id);
 			$delete = $this->db->delete('consultation');
-		    return ($delete == true) ? true : false;
-
+			return ($delete == true) ? true : false;
 		}
 	}
 
@@ -153,7 +152,7 @@ class Model_consultation extends CI_Model
 		return $query->num_rows();
 	}
 
-	public function countTotalConsultationByParish($year,$parish_code)
+	public function countTotalConsultationByParish($year, $parish_code)
 	{
 
 		$sql = "SELECT * 
@@ -164,12 +163,11 @@ class Model_consultation extends CI_Model
 		      AND $year = year(date_creation)";
 		$query = $this->db->query($sql, array());
 		return $query->num_rows();
-
 	}
 
 	public function createDocument($data)
 	{
-		if($data) {
+		if ($data) {
 			$insert = $this->db->insert('document', $data);
 			$insert_id = $this->db->insert_id();
 			return ($insert == true) ? $insert_id : false;
@@ -178,7 +176,7 @@ class Model_consultation extends CI_Model
 
 	public function removeDocument($id)
 	{
-		if($id) {
+		if ($id) {
 			$this->db->where('id', $id);
 			$delete = $this->db->delete('document');
 			return ($delete == true) ? true : false;
@@ -193,7 +191,6 @@ class Model_consultation extends CI_Model
 		WHERE document.id = ?";
 		$query = $this->db->query($sql, array($id));
 		return $query->row_array();
-
 	}
 
 	public function getConsultationClient($id = null)
@@ -201,7 +198,6 @@ class Model_consultation extends CI_Model
 		$sql = "SELECT * FROM consultation WHERE client_id = ?";
 		$query = $this->db->query($sql, array($id));
 		return $query->result_array();
-
 	}
 
 	public function getConsultationDocument($consultation_id)
@@ -220,9 +216,9 @@ class Model_consultation extends CI_Model
 		return $query->result_array();
 	}
 
-	public function getConsultationQuestion($program_id,$phase)
+	public function getConsultationQuestion($program_id, $phase)
 	{
-		$sql="SELECT question.*, question FROM question WHERE `program_id`=$program_id AND `phase_id`=$phase";
+		$sql = "SELECT question.*, question FROM question WHERE `program_id`=$program_id AND `phase_id`=$phase";
 		$query = $this->db->query($sql);
 		return $query->result_array();
 		//Nicholas ... here you have to think differently as we don't know how many
@@ -245,7 +241,7 @@ class Model_consultation extends CI_Model
             WHERE program.standard_id = 5 AND program.clause_id = 13";
 		$query = $this->db->query($sql, array());
 		return $query->result_array();	*/
-		
+
 		// Unless they know exactly what they want, I suggest to bring the general questions
 		// for demonstration of the system...
 		// $sql = "SELECT question.id AS 'question_id',question, sub_clause.code AS 'sub_clause', 
@@ -268,9 +264,5 @@ class Model_consultation extends CI_Model
 		$sql = "SELECT * FROM document WHERE consultation_id = ?";
 		$query = $this->db->query($sql, array($id));
 		return $query->num_rows();
-
 	}
-
-
-
 }

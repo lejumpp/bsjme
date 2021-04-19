@@ -26,6 +26,7 @@
       <li class="<?php echo (($active_tab === 'needs_assessment') ? 'active' : '') ?>"><a data-toggle="tab" href="#needs_assessment">Needs Assessment</a></li>
       <li class="<?php echo (($active_tab === 'client_work_plan') ? 'active' : '') ?>"><a data-toggle="tab" href="#client_work_plan">Work Plan</a></li>
       <li class="<?php echo (($active_tab === 'internal_cost_plan') ? 'active' : '') ?>"><a data-toggle="tab" href="#internal_cost_plan">Cost Plan</a></li>
+      <li class="<?php echo (($active_tab === 'document') ? 'active' : '') ?>"><a data-toggle="tab" href="#document">Document</a></li>
     </ul>
 
 
@@ -830,10 +831,173 @@
 
 
           <!--  End of the form  -->
+          <!----------------------------------------------------------------------------------------------------->
+          <!--                                                                                                 -->
+          <!--                                        D O C U M E N T                                         -->
+          <!--                                                                                                 -->
+          <!----------------------------------------------------------------------------------------------------->
+
+
+          <div id="document" class="tab-pane fade <?php echo (($active_tab === 'document') ? 'in active' : '') ?>">
+            <div class="box">
+              <div class="box-body">
+                <div class="row">
+                  <div class="col-md-12 col-xs-12">
+
+                    <?php echo form_open_multipart('technical_advice/uploadDocument/') ?>
+                    <?php echo "<table width='100%'>" ?>
+                    <?php echo "<tr>" ?>
+
+                    <?php if (in_array('createDocument', $user_permission)) : ?>
+
+                      <!-- Drop-down list Type of document  -->
+                      <?php echo "<td width='25%'><div class='form_group'>" ?>
+                      <?php echo "<label for='document_type'>Type of document" ?>
+                      <?php echo "<select class='form-control select_group' id='document_type' name='document_type'>" ?>
+                      <?php echo "<option value=''></option>" ?>
+                      <?php foreach ($document_type as $k => $v) : ?>
+                        <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
+                      <?php endforeach ?>
+                      <?php echo " </select></div>" ?>
+                      <?php echo "&nbsp;&nbsp;&nbsp;</label></td>" ?>
+
+                      <!-- Drop-down list Classification of document   -->
+                      <?php echo "<td width='20%'><div class='form_group'>" ?>
+                      <?php echo "<label for='document_class'>Classification" ?>
+                      <?php echo "<select class='form-control select_group' id='document_class' name='document_class'>" ?>
+                      <?php echo "<option value=''></option>" ?>
+                      <?php foreach ($document_class as $k => $v) : ?>
+                        <option value="<?php echo $v['id'] ?>"><?php echo $v['name'] ?></option>
+                      <?php endforeach ?>
+                      <?php echo " </select></div>" ?>
+                      <?php echo "&nbsp;&nbsp;&nbsp;</label></td>" ?>
+
+
+                      <!-- Input the name of the document -->
+                      <?php echo "<td width='40%' align=left><input type='file' required='required' name='consultation_document' id='consultation_document' size='60'  /></td>" ?>
+
+                      <!-- Submit the document -->
+                      <?php echo "<td width='15%'><input type='submit' name='submit' class='btn btn-primary' value='Add Document' /></td>" ?>
+                    <?php endif; ?>
+
+                    <?php echo "</tr>" ?>
+                    <?php echo "</div>" ?>
+                    <?php echo "</table>" ?>
+                    <?php echo "</form>" ?>
+
+
+
+                    <br>
+
+                    <div class="col-md-12 col-xs-12">
+                      <table id="manageTableDocument" class="table table-bordered table-striped" style="width:100%">
+                        <thead>
+                          <tr>
+                            <th>Document</th>
+                            <th>Type</th>
+                            <th>Classification</th>
+                            <th>Size</th>
+                            <th>Action</th>
+                          </tr>
+                        </thead>
+                      </table>
+                    </div>
+
+                  </div>
+                </div>
+                </form>
+              </div>
+            </div>
+            <!-- Delete Document -->
+
+            <?php if (in_array('deleteDocument', $user_permission)) : ?>
+
+              <div class="modal fade" tabindex="-1" role="dialog" id="removeDocumentModal">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title">Delete Document</h4>
+                    </div>
+                    <form role="form" action="<?php echo base_url('technical_advice/removeDocument') ?>" method="post" id="removeFormDocument">
+                      <div class="modal-body">
+                        <p>Do you really want to delete?</p>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                      </div>
+                    </form>
+                  </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+              </div><!-- /.modal -->
+
+            <?php endif; ?>
+
+
+            <!------------------------------------->
+            <!-- Javascript part of Document    --->
+            <!------------------------------------->
+
+
+            <script type="text/javascript">
+              var manageTableDocument;
+              var base_url = "<?php echo base_url(); ?>";
+
+              // initialize the datatable
+              manageTableDocument = $('#manageTableDocument').DataTable({
+                'ajax': base_url + 'technical_advice/fetchConsultationDocument/' + '<?php echo $technical_advice_data['id']; ?>',
+                'order': [
+                  [0, "asc"]
+                ]
+              });
+
+
+
+
+              function removeDocument(id) {
+                if (id) {
+                  $("#removeFormDocument").on('submit', function() {
+
+                    var form = $(this);
+
+                    // remove the text-danger
+                    $(".text-danger").remove();
+
+                    $.ajax({
+                      url: form.attr('action'),
+                      type: form.attr('method'),
+                      data: {
+                        document_id: id
+                      },
+                      dataType: 'json',
+                      success: function(response) {
+
+                        manageTableDocument.ajax.reload(null, false);
+
+                        if (response.success === true) {
+                          // hide the modal
+                          $("#removeDocumentModal").modal('hide');
+
+                        } else {
+
+                          $("#messages").html('<div class="alert alert-warning alert-dismissible" role="alert">' +
+                            '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+                            '<strong> <span class="glyphicon glyphicon-exclamation-sign"></span> </strong>' + response.messages +
+                            '</div>');
+                        }
+                      }
+                    });
+
+                    return false;
+                  });
+                }
+              }
+            </script>
+          </div>
         </div>
       </div>
     </div>
-</div>
 </div>
 </section>
 </div>

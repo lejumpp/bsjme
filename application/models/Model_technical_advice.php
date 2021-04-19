@@ -71,7 +71,7 @@ class Model_technical_advice extends CI_Model
 	public function getTechnicalAdviceClient($client_id)
 	{
 
-		$sql = "SELECT technical_advice.*,company_name, activity.name AS 'activity_name'
+		$sql = "SELECT technical_advice.*,company_name, activity AS 'activity_id', activity.name AS 'activity_name'
 				FROM technical_advice
 		        LEFT JOIN client ON technical_advice.client_id = client.id
 				LEFT JOIN user ON technical_advice.consultant_id = user.id
@@ -115,5 +115,49 @@ class Model_technical_advice extends CI_Model
 			$update = $this->db->update('technical_advice', $data);
 			return ($update == true) ? true : false;
 		}
+	}
+
+	public function createDocument($data)
+	{
+		if ($data) {
+			$insert = $this->db->insert('document', $data);
+			$insert_id = $this->db->insert_id();
+			return ($insert == true) ? $insert_id : false;
+		}
+	}
+
+	public function removeDocument($id)
+	{
+		if ($id) {
+			$this->db->where('id', $id);
+			$delete = $this->db->delete('document');
+			return ($delete == true) ? true : false;
+		}
+	}
+
+	public function getDocument($id = null)
+	{
+		$sql = "SELECT document.*,directory
+		FROM document
+		     JOIN client ON document.client_id = client.id
+		WHERE document.id = ?";
+		$query = $this->db->query($sql, array($id));
+		return $query->row_array();
+	}
+
+	public function getTechnicalAdviceDocument($ta_id)
+	{
+
+		//only document type related to consultation (2=consultation 3=client 4=activity 5=environment)
+
+		$sql = "SELECT document.*,directory,document_type.name AS 'document_type_name',
+		               document_class.name AS 'document_class_name'
+		FROM document
+			LEFT JOIN document_type ON document.document_type_id = document_type.id
+			LEFT JOIN document_class ON document.document_class_id = document_class.id
+			JOIN client ON document.client_id = client.id
+		WHERE ta_id = ?";
+		$query = $this->db->query($sql, array($ta_id));
+		return $query->result_array();
 	}
 }

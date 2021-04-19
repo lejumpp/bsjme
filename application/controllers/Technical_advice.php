@@ -71,7 +71,6 @@ class Technical_advice extends Admin_Controller
 
             $data = $this->model_technical_advice->getTechnicalAdviceByConsultant($consultant, $activity);
         }
-
         foreach ($data as $key => $value) {
             //Retrieve client information such as client name/ business name
             $client_data = $this->model_client->getClientDataById($value['client_id']);
@@ -112,7 +111,7 @@ class Technical_advice extends Admin_Controller
 
             $activity = '';
 
-            switch ($value['activity']) {
+            switch ($value['activity_id']) {
                 case '1':
                     $activity = '<span class="label label-success">' . $value['activity_name'] . '</span>';
                     break;
@@ -338,7 +337,136 @@ class Technical_advice extends Admin_Controller
         $this->data['client'] = $this->model_client->getClientData();
         $this->data['activity'] = $this->model_activity->getActiveActivity();
         $this->data['consultant'] = $this->model_user->getActiveConsultant();
+        $this->data['document_type'] = $this->model_document_type->getActiveDocumentType();
+        $this->data['document_class'] = $this->model_document_class->getActiveDocumentClass();
 
         $this->render_template('technical_advice/edit', $this->data);
+    }
+
+    //-----------------------------------------------------------------------------------------------------
+    //--                                                                                                 --
+    //--                                        D O C U M E N T                                          --
+    //--                                                                                                 --
+    //-----------------------------------------------------------------------------------------------------
+
+
+    //--> It fetches the document data from the document table
+    //    This function is called from the datatable ajax function
+
+    public function fetchConsultationDocument($id)
+    {
+        $result = array('data' => array());
+
+        $data = $this->model_technical_advice->getTechnicalAdviceDocument($id);
+
+        foreach ($data as $key => $value) {
+
+            $link = base_url('upload/documents/' . $value['directory'] . '/' . $value['doc_name']);
+            $doc_link = '<a href="' . $link . '" target="_blank" >' . ($value['doc_name']) . '</a>';
+
+            $buttons = '';
+            if (in_array('viewDocument', $this->permission)) {
+                $buttons .= '<a href="' . $link . '" target="_blank" class="btn btn-default"><i class="fa fa-search"></i></a>';
+            }
+
+            if (in_array('deleteDocument', $this->permission)) {
+                $buttons .= ' <button type="button" class="btn btn-default" onclick="removeDocument(' . $value['id'] . ')" data-toggle="modal" data-target="#removeDocumentModal"><i class="fa fa-trash"></i></button>';
+            }
+
+
+            $result['data'][$key] = array(
+                $doc_link,
+                $value['document_type_name'],
+                $value['document_class_name'],
+                $value['doc_size'],
+                $buttons
+            );
+        } // /foreach
+
+        echo json_encode($result);
+    }
+
+
+
+    //    This function is invoked from another function to upload the documents into the assets folder
+    //    of the client
+
+    public function uploadDocument()
+    {
+
+        if (!in_array('updateDocument', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+
+        $directory = $this->session->directory;
+        $config['upload_path'] = './' . $directory;
+        $config['allowed_types'] = 'gif|jpg|png|pdf|xls|xlsx|docx|doc|pptx';
+        $config['max_size'] = '4000';
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('consultation_document')) {
+            $msg_error = 'This type of document is not allowed or the document is too large.';
+            $this->session->set_flashdata('warning', $msg_error);
+            redirect('client/update/' . $this->session->client_id, 'refresh');
+        } else {
+            //---> Create the document in the table document
+
+            $data = array(
+                'client_id' => $this->session->client_id,
+                'ta_id' => $this->session->technical_advice_id,
+                'doc_size' => $this->upload->data('file_size'),
+                'doc_type' => $this->upload->data('file_type'),
+                'doc_name' => $this->upload->data('file_name'),
+                'document_type_id' => $this->input->post('document_type'),
+                'document_class_id' => $this->input->post('document_class'),
+                'updated_by' => $this->session->user_id,
+            );
+
+            $document_id = $this->model_technical_advice->createDocument($data);
+
+            if ($document_id == true) {
+                //--->  Upload the document
+                $data = array('upload_data' => $this->upload->data());
+                redirect('technical_advice/update/' . $this->session->technical_advice_id . "?tab=document", 'refresh');
+            } else {
+                $msg_error = 'Error occurred';
+                $this->session->set_flashdata('error', $msg_error);
+                redirect('technical_advice/', 'refresh');
+            }
+        }
+    }
+
+
+
+    public function removeDocument()
+    {
+        if (!in_array('deleteDocument', $this->permission)) {
+            redirect('dashboard', 'refresh');
+        }
+
+        $document_id = $this->input->post('document_id');
+        $response = array();
+
+        if ($document_id) {
+            //--> Get the link of the document for deleting the document on the directory
+            $document_data = $this->model_consultation->getDocument($document_id);
+            $doc_link = '/upload/documents/' . $document_data['directory'] . '/' . $document_data['doc_name'];
+            unlink(FCPATH . $doc_link);
+            //--> Delete the document in the document table
+            $delete = $this->model_consultation->removeDocument($document_id);
+            if ($delete == true) {
+                $response['success'] = true;
+                $response['messages'] = 'Successfully deleted';
+            } else {
+                $response['success'] = false;
+                $response['messages'] = 'Error in the database while deleting the information';
+            }
+        } else {
+            $response['success'] = false;
+            $response['messages'] = 'Refresh the page again';
+        }
+
+        echo json_encode($response);
     }
 }
