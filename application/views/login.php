@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
   <meta charset="utf-8">
@@ -24,14 +25,15 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 
 </head>
+
 <body class="hold-transition login-page">
 
-<div class="login-box">
-  <div class="login-logo">
+  <div class="login-box">
+    <div class="login-logo">
 
-  </div>
-  <!-- /.login-logo -->
-  <div class="login-box-body">
+    </div>
+    <!-- /.login-logo -->
+    <div class="login-box-body">
 
       <div class="row">
         <div class="col-md-1 col-xs-1">
@@ -47,17 +49,17 @@
 
       <?php echo validation_errors(); ?>
 
-      <?php if(!empty($errors)) {
+      <?php if (!empty($errors)) {
         echo $errors;
       } ?>
       <form action="<?php echo base_url('auth/login') ?>" method="post">
 
         <div class="form-group has-feedback">
-          <input type="username" class="form-control" name="username" id="username" placeholder=Username >
+          <input type="username" class="form-control" name="username" id="username" placeholder=Username>
           <span class="glyphicon glyphicon-user form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" name="password" id="password" placeholder=Password >
+          <input type="password" class="form-control" name="password" id="password" placeholder=Password>
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -67,36 +69,40 @@
                 <input type="checkbox"> Remember me
               </label>
             </div>
-          </div>        <!-- /.col -->
+          </div> <!-- /.col -->
           <div class="col-xs-4">
             <button type="submit" class="btn btn-warning btn-block btn-flat">Sign in</button>
-          </div>        <!-- /.col -->
+          </div> <!-- /.col -->
         </div>
-
+        <!-- Open Forgotten Password Dialog -->
+        <div class="row" align="center">
+          <h4><a href="<?php echo base_url('auth/password_reset') ?>"><u>Forgot password?</u></a></h4>
+        </div>
         <!-- Hyperlink to bring you to Registration Page -->
         <!-- <div class="row" align="center">
           <h4>Don't have an account <a href="<?php echo base_url('registration/register') ?>"><u>Click Here!</u></a></h4>
         </div> -->
 
 
-  </div>  <!-- /.login-box-body -->
-</div><!-- /.login-box -->
+    </div> <!-- /.login-box-body -->
+  </div><!-- /.login-box -->
 
-<!-- jQuery 3 -->
+  <!-- jQuery 3 -->
 
-<script src="<?php echo base_url('assets/bower_components/jquery/dist/jquery.min.js') ?>"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="<?php echo base_url('assets/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-<!-- iCheck -->
-<script src="<?php echo base_url('assets/plugins/iCheck/icheck.min.js') ?>"></script>
-<script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' // optional
+  <script src="<?php echo base_url('assets/bower_components/jquery/dist/jquery.min.js') ?>"></script>
+  <!-- Bootstrap 3.3.7 -->
+  <script src="<?php echo base_url('assets/bower_components/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
+  <!-- iCheck -->
+  <script src="<?php echo base_url('assets/plugins/iCheck/icheck.min.js') ?>"></script>
+  <script>
+    $(function() {
+      $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' // optional
+      });
     });
-  });
-</script>
+  </script>
 </body>
+
 </html>
