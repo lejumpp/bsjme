@@ -46,7 +46,7 @@ class Model_technical_advice extends CI_Model
 			$activity_to = $activity;
 		}
 		if ($consultant == 'all') {
-			$sql = "SELECT DISTINCT technical_advice.id AS 'id',
+			$sql = "SELECT DISTINCT technical_advice.id AS 'id', technical_advice.program_id as 'program_id',
             client.id AS 'client_id', technical_advice.consultant_id AS 'consultant_id', technical_advice.activity AS 'activity_id',
             activity.name AS 'activity_name', date_created
 			FROM technical_advice
@@ -55,7 +55,7 @@ class Model_technical_advice extends CI_Model
 			WHERE activity BETWEEN $activity_from AND $activity_to     
 			ORDER by client.activity_id DESC,company_name";
 		} else {
-			$sql = "SELECT DISTINCT technical_advice.id, technical_advice.client_id, technical_advice.consultant_id as 'consultant_id', technical_advice.activity AS 'activity_id', activity.name AS 'activity_name', technical_advice.date_created FROM technical_advice 
+			$sql = "SELECT DISTINCT technical_advice.id, technical_advice.program_id as 'program_id', technical_advice.client_id, technical_advice.consultant_id as 'consultant_id', technical_advice.activity AS 'activity_id', activity.name AS 'activity_name', technical_advice.date_created FROM technical_advice 
 			LEFT JOIN client ON technical_advice.client_id = client.id
 			LEFT JOIN user ON technical_advice.consultant_id = user.id
 			JOIN activity ON technical_advice.activity= activity.id
@@ -71,9 +71,11 @@ class Model_technical_advice extends CI_Model
 	public function getTechnicalAdviceClient($client_id)
 	{
 
-		$sql = "SELECT technical_advice.*,company_name, activity AS 'activity_id', activity.name AS 'activity_name'
+		$sql = "SELECT technical_advice.*,company_name, program.name as 'program_name',
+		 activity AS 'activity_id', activity.name AS 'activity_name'
 				FROM technical_advice
 		        LEFT JOIN client ON technical_advice.client_id = client.id
+				LEFT JOIN program on technical_advice.program_id = program.id
 				LEFT JOIN user ON technical_advice.consultant_id = user.id
 				LEFT JOIN activity ON technical_advice.activity = activity.id
 		WHERE client.id = $client_id";

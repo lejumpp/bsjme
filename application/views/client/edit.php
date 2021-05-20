@@ -25,7 +25,7 @@
       <li class="<?php echo (($active_tab === 'client') ? 'active' : '') ?>"><a data-toggle="tab" href="#client">Client</a></li>
       <li class="<?php echo (($active_tab === 'requirement') ? 'active' : '') ?>"><a data-toggle="tab" href="#requirement">Requirement</a></li>
       <li class="<?php echo (($active_tab === 'consultation') ? 'active' : '') ?>"><a data-toggle="tab" href="#consultation">Consultation</a></li>
-      <li class="<?php echo (($active_tab === 'technical_advice') ? 'active' : '') ?>"><a data-toggle="tab" href="#technical_advice">Technical Advice</a></li>
+      <li class="<?php echo (($active_tab === 'technical_advice') ? 'active' : '') ?>"><a data-toggle="tab" href="#technical_advice">Program Management</a></li>
       <li class="<?php echo (($active_tab === 'inquiry') ? 'active' : '') ?>"><a data-toggle="tab" href="#inquiry">Inquiry</a></li>
       <li class="<?php echo (($active_tab === 'document') ? 'active' : '') ?>"><a data-toggle="tab" href="#document">Document</a></li>
     </ul>
@@ -557,7 +557,7 @@
                   <div class="box-body">
 
                     <?php if (in_array('createTechnicalAdvice', $user_permission)) : ?>
-                      <a href="<?php echo base_url('technical_advice/create/' . $client_data['id']) ?>" class="btn btn-primary">Add Technical Advice</a>
+                      <a href="<?php echo base_url('technical_advice/create/' . $client_data['id']) ?>" class="btn btn-primary">Add Program</a>
                       <br /> <br />
                     <?php endif; ?>
 
@@ -566,6 +566,7 @@
                         <tr>
                           <th>Company Name</th>
                           <th>Consultant</th>
+                          <th>Program</th>
                           <th>Activity</th>
                           <th>Date creation</th>
                           <?php if (in_array('updateTechnicalAdvice', $user_permission) || in_array('deleteTechnicalAdvice', $user_permission) || in_array('viewTechnicalAdvice', $user_permission)) : ?>

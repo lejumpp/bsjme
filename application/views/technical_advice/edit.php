@@ -22,7 +22,7 @@
 
   <section class="content">
     <ul class="nav nav-tabs">
-      <li class="<?php echo (($active_tab === 'technical_advice') ? 'active' : '') ?>"><a data-toggle="tab" href="#technical_advice">Technical Advice</a></li>
+      <li class="<?php echo (($active_tab === 'technical_advice') ? 'active' : '') ?>"><a data-toggle="tab" href="#technical_advice">Program</a></li>
       <li class="<?php echo (($active_tab === 'needs_assessment') ? 'active' : '') ?>"><a data-toggle="tab" href="#needs_assessment">Needs Assessment</a></li>
       <li class="<?php echo (($active_tab === 'client_work_plan') ? 'active' : '') ?>"><a data-toggle="tab" href="#client_work_plan">Work Plan</a></li>
       <li class="<?php echo (($active_tab === 'internal_cost_plan') ? 'active' : '') ?>"><a data-toggle="tab" href="#internal_cost_plan">Cost Plan</a></li>
@@ -178,7 +178,7 @@
                           <div class="row">
                             <!-- row 1 -->
 
-                            <div class="col-md-6 col-xs-6">
+                            <div class="col-md-4 col-xs-4">
                               <div class="form-group">
                                 <label for="client">Company <font color="red">*</font></label>
                                 <select class="form-control select_group" id="client" name="client">
@@ -192,7 +192,21 @@
                                 </select>
                               </div>
                             </div>
-                            <div class="col-md-6 col-xs-6">
+
+                            <div class="col-md-3 col-xs-3">
+                              <div class="form-group">
+                                <label for="activity">Program <font color="red">*</font></label>
+                                <select class="form-control select_group" id="program" name="program">
+                                  <?php foreach ($program as $k => $v) : ?>
+                                    <option value="<?php echo $v['id'] ?>" <?php if (set_value('program', isset($technical_advice_data['program_id']) ? $technical_advice_data['program_id'] : '') == $v['id']) {
+                                                                              echo "selected='selected'";
+                                                                            } ?>><?php echo $v['name'] ?></option>
+                                  <?php endforeach ?>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="col-md-5 col-xs-5">
                               <div class="form-group">
                                 <label for="consultant">Consultant(s)</label>
                                 <?php $consultant_data = json_decode($technical_advice_data['consultant_id']); ?>

@@ -10,9 +10,9 @@ class Technical_advice extends Admin_Controller
 
         $this->not_logged_in();
 
-        $this->data['page_title'] = 'Technical Advice';
+        $this->data['page_title'] = 'Program Management';
         $this->data['active_tab'] =  $this->input->get('tab') ?: 'technical_advice';
-        $this->log_module = 'Technical Advice';
+        $this->log_module = 'Program Management';
     }
 
 
@@ -75,6 +75,8 @@ class Technical_advice extends Admin_Controller
             //Retrieve client information such as client name/ business name
             $client_data = $this->model_client->getClientDataById($value['client_id']);
 
+            $program_data = $this->model_program->getProgramData($value['program_id']);
+
             //--> Prepare the list of consultants to view in the datatable
 
             $consultant = json_decode($value['consultant_id']);
@@ -124,6 +126,7 @@ class Technical_advice extends Admin_Controller
             }
 
             $result['data'][$key] = array(
+                $program_data['name'],
                 $client_data['company_name'],
                 $consultant_list,
                 $activity,
@@ -140,6 +143,7 @@ class Technical_advice extends Admin_Controller
         $data = $this->model_technical_advice->getTechnicalAdviceClient($client_id);
         foreach ($data as $key => $value) {
             $client_data = $this->model_client->getClientDataById($value['client_id']);
+            $program_data = $this->model_program->getProgramData($value['program_id']);
             //--> Prepare the list of consultants to view in the datatable
             $consultant = json_decode($value['consultant_id']);
             $consultant_list = '';
@@ -178,6 +182,7 @@ class Technical_advice extends Admin_Controller
             $result['data'][$key] = array(
                 $client_data['company_name'],
                 $consultant_list,
+                $program_data['name'],
                 $activity,
                 $value['date_created'],
                 $buttons
@@ -193,6 +198,7 @@ class Technical_advice extends Admin_Controller
         }
         $this->form_validation->set_rules('client', 'Client/Company', 'trim|required');
         $this->form_validation->set_rules('activity', 'Activity', 'trim|required');
+        $this->form_validation->set_rules('program', 'Program', 'trim|required');
         $this->form_validation->set_rules('date_created', 'Creation Date', 'trim|required');
         $this->form_validation->set_error_delimiters('<p class="alert alert-warning">', '</p>');
 
@@ -201,6 +207,7 @@ class Technical_advice extends Admin_Controller
             $data = array(
                 'client_id' => $this->input->post('client'),
                 'consultant_id' => json_encode($this->input->post('consultant')),
+                'program_id' => $this->input->post('program'),
                 'activity' => $this->input->post('activity'),
                 'date_created' => $this->input->post('date_created'),
                 'date_begin' => $this->input->post('date_begin'),
@@ -239,6 +246,7 @@ class Technical_advice extends Admin_Controller
         $this->data['client'] = $this->model_client->getClientData();
         $this->data['activity'] = $this->model_activity->getActiveActivity();
         $this->data['consultant'] = $this->model_user->getActiveConsultant();
+        $this->data['program'] = $this->model_program->getActiveProgram();
         //This is for adding a technical advice to the client, coming from the client edit
         $this->data['fromClient'] = $id;
 
@@ -301,6 +309,7 @@ class Technical_advice extends Admin_Controller
 
         $this->form_validation->set_rules('client', 'Client/Company', 'trim|required');
         $this->form_validation->set_rules('activity', 'Activity', 'trim|required');
+        $this->form_validation->set_rules('program', 'Program', 'trim|required');
         $this->form_validation->set_error_delimiters('<p class="alert alert-warning">', '</p>');
 
         //--->  Validation of the form
@@ -309,6 +318,7 @@ class Technical_advice extends Admin_Controller
             $data = array(
                 'client_id' => $this->input->post('client'),
                 'consultant_id' => json_encode($this->input->post('consultant')),
+                'program_id' => $this->input->post('program'),
                 'activity' => $this->input->post('activity'),
                 'date_created' => $this->input->post('date_created'),
                 'date_begin' => $this->input->post('date_begin'),
@@ -325,7 +335,7 @@ class Technical_advice extends Admin_Controller
             } else {
                 $msg_error = 'Error occurred';
                 $this->session->set_flashdata('error', $msg_error);
-                redirect('technical_advice/update/' . $technical_advice_id . "?tab=technical_advice", 'refresh');
+                // redirect('technical_advice/update/' . $technical_advice_id . "?tab=technical_advice", 'refresh');
             }
         }
         //--> We are in edit of the form, preparation of the drop down list
@@ -336,10 +346,10 @@ class Technical_advice extends Admin_Controller
         //  Here the data for consultant , activity and consultant is loadded
         $this->data['client'] = $this->model_client->getClientData();
         $this->data['activity'] = $this->model_activity->getActiveActivity();
+        $this->data['program'] = $this->model_program->getActiveProgram();
         $this->data['consultant'] = $this->model_user->getActiveConsultant();
         $this->data['document_type'] = $this->model_document_type->getActiveDocumentType();
         $this->data['document_class'] = $this->model_document_class->getActiveDocumentClass();
-
         $this->render_template('technical_advice/edit', $this->data);
     }
 
